@@ -29,6 +29,8 @@ import {
     IconCoin,
     IconChevronDown,
   } from '@tabler/icons-react';
+  import logo from '../../skyFlightsLogo.jpeg'
+
   
   const useStyles = createStyles((theme) => ({
     link: {
@@ -148,9 +150,9 @@ import {
   
     return (
       <Box pb={120}>
-        <Header height={60} px="md">
+        <Header px="md">
           <Group position="apart" sx={{ height: '100%' }}>
-            <h3>Sky High</h3>
+            <img src={logo} className='w-[15vh] m-3'></img>
   
             <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
               <a href="#" className={classes.link}>
@@ -253,7 +255,7 @@ import {
   
             <Group position="center" grow pb="xl" px="md">
               <Button variant="default">Log in</Button>
-              <Button>Sign up</Button>
+              <Button variant="default">Sign up</Button>
             </Group>
           </ScrollArea>
         </Drawer>
