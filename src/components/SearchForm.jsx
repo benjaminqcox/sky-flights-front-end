@@ -109,12 +109,14 @@ function SearchForm ({darkMode}) {
                             label="Departing"
                             defaultValue={dayjs()}
                             value={departureDate}
+                            maxDate={returnDate ? returnDate.subtract(1, "days") : ''}
                             onChange={(newValue) => setDepartureDate(newValue)}
                         />
                         {returnFlight ? 
                         <DatePicker
                             label="Returning"
                             value={returnDate}
+                            minDate={departureDate.add(1, "days")}
                             onChange={(newValue) => setReturnDate(newValue)}
                         /> : <></>}
                     </div>
