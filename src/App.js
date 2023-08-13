@@ -15,7 +15,8 @@ import { IconContext } from "react-icons"
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Button, ButtonBase, IconButton, ThemeProvider, createTheme } from '@mui/material';
-
+import MuiThemeProvider from '@mui/private-theming/ThemeProvider/ThemeProvider'
+import { MantineProvider } from '@mantine/core';
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
   })
 
   return (
+    
     <ThemeProvider theme={darkMode === "dark" ? darkTheme : lightTheme}>
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
