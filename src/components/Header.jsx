@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { HeaderMegaMenu } from './externalComponents/MantineHeader';
-import logo from '../skyFlightsLogo.jpeg'
+import logo from '../skyLogo.png'
 import { Link } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { IconContext } from "react-icons"
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Button, ButtonBase, IconButton } from '@mui/material';
-import logoLight from '../lightLogo.png';
-import logoDark from '../darkLogo.png';
 
 
 
@@ -16,7 +14,7 @@ function Header ({ loggedIn, darkMode, handleThemeSwitch }) {
 
     return (
             <header className="flex flex-row border-b-[1px] border-gray-600/30 dark:border-slate-300/30 justify-between self-center fixed w-full top-0 backdrop-blur z-50">
-                <Link to="/"><img src={darkMode === "dark" ? logoDark : logoLight} className='w-[20vh] m-5 rounded-sm'></img></Link>
+                <Link to="/"><img src={logo} className='w-[20vh] m-5 rounded-sm'></img></Link>
                 
                 <div className='flex my-auto m-5 gap-3'>
                     {/* <Button variant='contained' className='h-[50%] top-2 right-2'>Login</Button> */}

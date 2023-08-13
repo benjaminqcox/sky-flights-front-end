@@ -51,11 +51,11 @@ function App() {
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div className="App">
-          <div className=' bg-white dark:bg-[#202124] transition-all duration-100'>
+          <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
             <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
 
             <div className='w-[100vw] h-[100vh] flex-col flex justify-center p-0'>
-              <SearchForm/>
+              <SearchForm darkMode={darkMode}/>
               {/* <Button className='w-[50%]'>Hello</Button> */}
             </div>
             </div>
