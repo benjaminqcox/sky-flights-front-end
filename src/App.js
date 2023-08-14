@@ -58,22 +58,10 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div className="App">
           
-          <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
-            <div className='h-screen'>
-            <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
-
-            <div className='w-[100vw] h-[100vh] flex-col flex justify-center p-0'>
-              <SearchForm darkMode={darkMode}/>
-
-
-              {/* {dummyFlightData.map((data) => {
-                console.log(data)
-                return <FlightListItem flightData={data}/>
-              })} */}
-
-              {/* <Button className='w-[50%]'>Hello</Button> */}
-            </div>
-            </div>
+            <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
+              <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
+              <LandingPage darkMode={darkMode}/>
+              
             </div>
           </div>
         </LocalizationProvider>

@@ -31,25 +31,36 @@ function SearchForm ({darkMode}) {
     const [returnFlight, setReturnFlight] = useState(false);
 
     const [value2, setValue2] = useState([0, 100]);
-    const minDistance = 100;
+    const minDistance = 200;
 
     function valuetext(value) {
         return `${value}°C`;
     }
 
+    const handlePriceChangeInputFields = (e, whichOne) => {
+        
+        let minPrice = value2[0];
+        let maxPrice = value2[1];
+        if (whichOne === 1) {
+            setValue2([e.target.value, maxPrice])
+        } else {
+            setValue2([minPrice, e.target.value])
+        }
+    }
+
     const handleChange2 = (event, newValue, activeThumb) => {
         if (!Array.isArray(newValue)) {
-        return;
+            return;
         }
 
         if (newValue[1] - newValue[0] < minDistance) {
-        if (activeThumb === 0) {
-            const clamped = Math.min(newValue[0], 100 - minDistance);
-            setValue2([clamped, clamped + minDistance]);
-        } else {
-            const clamped = Math.max(newValue[1], minDistance);
-            setValue2([clamped - minDistance, clamped]);
-        }
+            if (activeThumb === 0) {
+                const clamped = Math.min(newValue[0], 3000 - minDistance);
+                setValue2([clamped, clamped + minDistance]);
+            } else {
+                const clamped = Math.max(newValue[1], minDistance);
+                setValue2([clamped - minDistance, clamped]);
+            }
         } else {
         setValue2(newValue);
         }
@@ -180,19 +191,18 @@ function SearchForm ({darkMode}) {
                             <MultipleSelectCheckmarks/>
                         </div>
 
-                        <div className='w-[33%] border-solid border-0'>
+                        <div className='w-[33%] border-solid border-0 flex flex-col gap-3'>
                               
-                              <p className="text-lg self-center font-['Roboto'] font-light tracking-wide w-[40px]">Price</p>
-                              <p className="text-sg float-left self-center text-start font-['Roboto'] font-light tracking-wide w-[100px]">{`Min: £${value2[0]}`}</p>
-                              <p className="text-sg float-right self-center text-end font-['Roboto'] font-light tracking-wide w-[100px]">{`Max: £${value2[1]}`}</p>
+                              <TextField inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" label="Min Price" variant="outlined" value={value2[0]} onChange={(e) => {handlePriceChangeInputFields(e, 1)}}/>
+                              <TextField inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" label="Max Price" variant="outlined" value={value2[1]} onChange={(e) => {handlePriceChangeInputFields(e, 2)}}/>
                                 <Slider
                                     getAriaLabel={() => 'Minimum distance shift'}
                                     value={value2}
                                     onChange={handleChange2}
                                     valueLabelDisplay="auto"
-                                    max={1000}
+                                    max={3000}
                                     getAriaValueText={valuetext}
-                                    disableSwap
+
                                     
                                     style={{width: '90%'}}
                                 />
