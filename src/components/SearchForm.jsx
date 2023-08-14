@@ -68,10 +68,10 @@ function SearchForm ({darkMode}) {
 
         <>
             {/* <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}> */}
-            <div className={`text-gray-600 dark:text-gray-300 shadow-lg grid justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] ${moreFilters ? `h-[50%]` : `h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out`}>
+            <div className={`text-gray-600 dark:text-gray-300 shadow-lg grid justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] ${moreFilters ? `min-h-[50%]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll`}>
                 
-                <div className='flex justify-around w-[100%] mb-4'>
-                    <div className='flex w-[250px] h-min self-end text-xs text-center items-center'>
+                <div className='flex justify-evenly sm:justify-around w-[100%] mb-4'>
+                    <div className='flex w-[250px] h-min self-end text-xs text-center items-center justify-center sm:justify-normal'>
                         <p className={`flex gap-1 ${!returnFlight ? 'text-blue-500 dark:text-blue-300' : ''}`}>One-way<HiArrowSmallRight fontSize={'1.2rem'}/></p>
                         <Switch 
                             className=' bottom-0'
@@ -82,13 +82,13 @@ function SearchForm ({darkMode}) {
                         <p className={`flex gap-1 ${returnFlight ? 'text-blue-500 dark:text-blue-300' : ''}`}><HiArrowsRightLeft fontSize={'1.2rem'}/>Return</p>
                         
                     </div>
-                    <p className="text-3xl self-end font-['Montserrat'] font-light">Search for Flights</p>
-                    <div className='w-[250px]'></div>
+                    <p className="text-[0] sm:text-3xl self-end font-['Montserrat'] font-light">Search for Flights</p>
+                    <div className=' w-[0px] sm:w-[250px]'></div>
                 </div>
                 
                 
                 <div className='sm:flex self-center w-[80%] h-min mx-auto gap-2'>
-                    <div className='flex gap-2 w-[100%] sm:w-auto mb-0'>
+                    <div className='flex gap-2 w-[100%] sm:w-auto mb-4 sm:mb-0'>
                         <TextField
                             className='mx-auto h-max w-[50%] sm:w-auto'
                             placeholder="From Location"
@@ -104,7 +104,7 @@ function SearchForm ({darkMode}) {
                             rightsection={loading ? <Loader size="xs" /> : <></>}
                         />
                     </div>
-                    <div className='flex gap-2'>
+                    <div className='flex gap-2 mb-4 sm:mb-0'>
                         <DatePicker
                             label="Departing"
                             defaultValue={dayjs()}

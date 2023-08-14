@@ -17,6 +17,8 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Button, ButtonBase, IconButton, ThemeProvider, createTheme } from '@mui/material';
 import MuiThemeProvider from '@mui/private-theming/ThemeProvider/ThemeProvider'
 import { MantineProvider } from '@mantine/core';
+import FlightListItem from './components/FlightListItem';
+import dummyFlightData from './dummyFlightData.json'
 
 function App() {
 
@@ -47,18 +49,30 @@ function App() {
     }
   })
 
+  console.log(dummyFlightData)
+
   return (
     
     <ThemeProvider theme={darkMode === "dark" ? darkTheme : lightTheme}>
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div className="App">
+          
           <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
+            <div className='h-screen'>
             <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
 
             <div className='w-[100vw] h-[100vh] flex-col flex justify-center p-0'>
               <SearchForm darkMode={darkMode}/>
+
+
+              {/* {dummyFlightData.map((data) => {
+                console.log(data)
+                return <FlightListItem flightData={data}/>
+              })} */}
+
               {/* <Button className='w-[50%]'>Hello</Button> */}
+            </div>
             </div>
             </div>
           </div>
