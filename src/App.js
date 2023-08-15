@@ -7,7 +7,7 @@ import LandingPage from './components/LandingPage';
 import SearchForm from './components/SearchForm';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { HeaderMegaMenu } from './components/externalComponents/MantineHeader';
 import { useState, useEffect } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -19,6 +19,8 @@ import MuiThemeProvider from '@mui/private-theming/ThemeProvider/ThemeProvider'
 import { MantineProvider } from '@mantine/core';
 import FlightListItem from './components/FlightListItem';
 import dummyFlightData from './dummyFlightData.json'
+import FlightMap from './components/FlightMap';
+import WeatherIcon from './components/WeatherIcon';
 
 function App() {
 
@@ -52,20 +54,23 @@ function App() {
   return (
     
     <ThemeProvider theme={darkMode === "dark" ? darkTheme : lightTheme}>
-      <BrowserRouter>
+      <Router>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div className="App">
           
             <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
               <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
               <LandingPage darkMode={darkMode}/>
-              
+                <WeatherIcon />
+                <Routes>
+                  <Route path='/map' Component={FlightMap}/>
+                </Routes>
+             
             </div>
-          </div>
+          </div>  
         </LocalizationProvider>
-      </BrowserRouter>
+      </Router>
     </ThemeProvider>
-    
     
    
   );
