@@ -12,18 +12,32 @@ import { dayCalendarSkeletonClasses } from '@mui/x-date-pickers';
 import { useEffect } from 'react';
 import axios from 'axios';
 import airlineLogosJson from '../airlines.json';
+import airportsJson from '../airports.json'
+import { Modal } from '@mui/material';
+import FlightMap from './FlightMap';
+import WeatherIcon from './WeatherIcon';
 
 function FlightListItem( {darkMode, flightData} ) {
     const [moreInfo, setMoreInfo] = useState(false);
     const [airlineName, setAirlineName] = useState("");
     const [airlineLogo, setAirlineLogo] = useState("");
     const [countryImage, setCountryImage] = useState("");
+    const [open, setOpen] = useState(false);
+    const [coordinates, setCoordinates] = useState([])
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const UNSPLASH_ACCESS_KEY = "K4KeY0zjsNDVng4XwKq1waPyiQ89-Ix3gMoo_CTMwZ8";
     // <button onClick={() => setMoreFilters(!moreFilters)} className='box-border text-white h-[57px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>{moreFilters? "- Less Filters" : "+ More Filters"}</button>
 
     useEffect(() => {
         getAirlineInfo();
         getCountryImage(airlineName, UNSPLASH_ACCESS_KEY);
+        const airportFrom = airportsJson.find((airport) => airport.iata == flightData.flyFrom);
+        const airportTo = airportsJson.find((airport) => airport.iata == flightData.flyTo);
+        setCoordinates([[airportFrom.lat, airportFrom.lon], [airportTo.lat, airportTo.lon]])
+        setMoreInfo(false);
     }, [flightData]);
 
     const getAirlineInfo = (aName) => {
@@ -44,6 +58,11 @@ function FlightListItem( {darkMode, flightData} ) {
     const arrivalDate = flightData.local_arrival.substring(0, flightData.local_arrival.indexOf("T"));
     const arrivalTime = flightData.local_arrival.substring(flightData.local_arrival.indexOf("T") + 1, flightData.local_arrival.indexOf("Z"));
     
+    // const latitudeFrom = airportFrom.lat;
+    // const longitudeFrom = airportFrom.lon;
+    // const latitudeTo = airportTo.lat;
+    // const longitudeTo = airportTo.lon;
+
     return ( 
         <>
             <div className={`text-gray-600 place-items-stretch dark:text-gray-300 shadow-lg justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] h-[80vh] sm:h-[20vw] min-h-[330px] transition-all duration-300 ease-out mt-5 flex flex-col sm:flex-row mx-auto   ${moreInfo ? `min-h-[50%]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll sm:overflow-hidden`}>
@@ -66,13 +85,20 @@ function FlightListItem( {darkMode, flightData} ) {
                     <img    
                             src={countryImage}
                             className=' rounded-tr-none rounded-br-none object-cover object-top h-[100%] w-full hover:scale-105 transition duration-150 cursor-pointer'
+                            onClick={handleOpen}
                         />
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                    >
+                        <FlightMap coords={coordinates}/>
+                    </Modal>
                     {/* </div> */}
                 </div>
                 <div className='border-0 border-solid border-black sm:w-[37%] pt-12 pl-5'>
                     <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
                         <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[350px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
-                            <Timeline.Item bullet={<IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
+                            <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
                                 <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
                                 <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 3600) + ' hours'}</Text>
                             </Timeline.Item>
@@ -85,7 +111,7 @@ function FlightListItem( {darkMode, flightData} ) {
                                 <Text size="xs" mt={4}>4 hours left</Text>
                             </Timeline.Item> */}
 
-                            <Timeline.Item bullet={<IconGitCommit size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
+                            <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
                                 <Text color="dimmed" size="sm" className='font-bold'>{arrivalTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDate}</Text></Text>
                             </Timeline.Item>
                         </Timeline>
@@ -111,7 +137,7 @@ function FlightListItem( {darkMode, flightData} ) {
                         Select
                     </button>
 
-                    <button className={`p-2 absolute bottom-3 rounded-3xl border-solid border-slate-300 flex gap-2 border-[1px] hover:bg-slate-200/30 transition-all duration-200 active:bg-slate-500/30 hover:cursor-pointer`}
+                    <button className={`p-2 absolute bottom-6 rounded-3xl border-solid border-slate-300 flex gap-2 border-[1px] hover:bg-slate-200/30 transition-all duration-200 active:bg-slate-500/30 hover:cursor-pointer`}
                             onClick={() => setMoreInfo(!moreInfo)}>
                         {
                             moreInfo ? 

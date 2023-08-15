@@ -61,7 +61,7 @@ function App() {
             <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
               <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
               <LandingPage darkMode={darkMode}/>
-                <WeatherIcon />
+                {/* <WeatherIcon /> */}
                 <Routes>
                   <Route path='/map' Component={FlightMap}/>
                 </Routes>
