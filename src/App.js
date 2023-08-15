@@ -18,6 +18,7 @@ import { Button, ButtonBase, IconButton, ThemeProvider, createTheme } from '@mui
 import MuiThemeProvider from '@mui/private-theming/ThemeProvider/ThemeProvider'
 import { MantineProvider } from '@mantine/core';
 import FlightMap from './components/FlightMap';
+import WeatherIcon from './components/WeatherIcon';
 
 function App() {
 
@@ -59,6 +60,7 @@ function App() {
               <div className='w-[100vw] h-[100vh] flex-col flex justify-center p-0'>
                 <SearchForm darkMode={darkMode}/>
                 {/* <Button className='w-[50%]'>Hello</Button> */}
+                <WeatherIcon />
                 <Routes>
                   <Route path='/map' Component={FlightMap}/>
                 </Routes>

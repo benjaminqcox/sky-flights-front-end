@@ -48,8 +48,7 @@ const FlightMap = () => {
         <>
             {allLatLng.length &&
                 <MapContainer center={allLatLng[0]} zoom={12} scrollWheelZoom={false}>
-                {allLatLng.map((latLng) => <Marker key={latLng[0]} position={latLng}/>
-                )}
+                {allLatLng.map((latLng) => <Marker key={latLng[0]} position={latLng}/>)}
                     <Polyline positions={allLatLng}/>
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
