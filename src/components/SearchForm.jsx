@@ -1,5 +1,5 @@
 import { TextInput, Loader, MantineProvider } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { DateRange, Today } from '@mui/icons-material';
 import { Button, Switch, TextField } from '@mui/material';
@@ -10,6 +10,8 @@ import { Slider } from '@mui/material';
 import dayjs from 'dayjs';
 import { HiArrowSmallRight, HiArrowsRightLeft } from 'react-icons/hi2';
 import axios from 'axios';
+import airports from '../airports.json';
+import { Group, Text, MantineColor, SelectItemProps, Autocomplete } from '@mantine/core';
 
 
 function SearchForm ({darkMode, setFlights}) {
@@ -18,11 +20,11 @@ function SearchForm ({darkMode, setFlights}) {
     const [moreFilters, setMoreFilters] = useState(false); 
 
     // Form state values
-    const [fromLocation, setFromLocation] = useState("");
+    const [fromLocation, setFromLocation] = useState("LHR, London Heathrow Airport");
     const [toLocation, setToLocation] = useState("");
     const [departureDate, setDepartureDate] = useState(dayjs());
     const [returnDate, setReturnDate] = useState(null);
-    const [adultValue, setAdultValue] = useState(0);
+    const [adultValue, setAdultValue] = useState(1);
     const [childrenValue, setChildrenValue] = useState(0);
     const [infantsValue, setInfantsValue] = useState(0);
     const [cabin, setCabin] = useState("M");
@@ -31,12 +33,14 @@ function SearchForm ({darkMode, setFlights}) {
 
     const [returnFlight, setReturnFlight] = useState(false);
 
-    const [value2, setValue2] = useState([0, 100]);
+    const [value2, setValue2] = useState([0, 3000]);
     const minDistance = 200;
 
     function valuetext(value) {
         return `${value}°C`;
     }
+
+    const autofill_data = airports.map((item) => ({ ...item, value: item.iata + ", " + item.name }));
 
     const handlePriceChangeInputFields = (e, whichOne) => {
         
@@ -48,6 +52,8 @@ function SearchForm ({darkMode, setFlights}) {
             setValue2([minPrice, e.target.value])
         }
     }
+
+    
 
     const handleChange2 = (event, newValue, activeThumb) => {
         if (!Array.isArray(newValue)) {
@@ -78,14 +84,36 @@ function SearchForm ({darkMode, setFlights}) {
     const handleSubmit = async function(event) {
         event.preventDefault();
         try {
-            const URL = `http://localhost:8081/booking/getFiltered/?flyTo=${toLocation}&flyFrom=${fromLocation}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.toDate().toLocaleDateString()}`
-            const response = await axios.get(URL)
-            await setFlights(response.data);
+            if (!moreFilters) {
+                const URL = `http://localhost:8081/booking/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                console.log(URL);
+                const response = await axios.get(URL)
+                console.log(response);
+                await setFlights(response.data);
+            } else {
+                let isWeekdaysOnly = false;
+                let isWeekendsOnly = false;
+                if (travelDays === "weekdays") {
+                    isWeekdaysOnly = true;
+                } else if (travelDays === "weekends") {
+                    isWeekendsOnly = true;
+                } else if (travelDays === "both") {
+                    isWeekdaysOnly = false;
+                    isWeekendsOnly = false;
+                }
+                console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
+                console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
+                const URL = `http://localhost:8081/booking/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}`
+                const response = await axios.get(URL)
+                console.log(response);
+                await setFlights(response.data);
+            }
+                
         } catch (error) {
             console.error(error);
         }
     }
-    
+
     return (  
 
         <>
@@ -111,20 +139,47 @@ function SearchForm ({darkMode, setFlights}) {
                 
                 <div className='sm:flex self-center w-[80%] h-min mx-auto gap-2'>
                     <div className='flex gap-2 w-[100%] sm:w-auto mb-4 sm:mb-0'>
-                        <TextField
+                        {/* <TextField
                             className='mx-auto h-max w-[50%] sm:w-auto'
                             placeholder="From Location"
                             value={fromLocation}
                             onChange={(e) => setFromLocation(e.target.value)}
                             rightsection={loading ? <Loader size="xs" /> : <></>}
-                        />
-                        <TextField
-                            className='mx-auto w-[50%] sm:w-auto'
-                            placeholder="To Destination"
-                            value={toLocation}
-                            onChange={(e) => setToLocation(e.target.value)}
-                            rightsection={loading ? <Loader size="xs" /> : <></>}
-                        />
+                        /> */}
+                        <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
+                            <Autocomplete
+                                size='lg'
+                                classNames={{ item: 'text-sm whitespace-prewrap break-normal' }}
+                                className='mx-auto w-[50%] sm:w-auto'
+                                value={fromLocation}
+                                onChange={setFromLocation}
+                                onClick={() => {setFromLocation("")}}
+                                rightsection={loading ? <Loader size="xs" /> : <></>}
+                                placeholder="Choose start airport"
+                                data={autofill_data}
+                                transitionProps={{ transition: 'pop-top-left', duration: 120, timingFunction: 'ease' }}
+                                filter={(value, item) =>
+                                item.value.toLowerCase().includes(value.toLowerCase().trim())
+                                }
+                            />
+                        </MantineProvider>
+                        <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
+                            <Autocomplete
+                                size='lg'
+                                classNames={{ item: 'text-sm whitespace-prewrap break-normal' }}
+                                className='mx-auto w-[50%] sm:w-auto'
+                                value={toLocation}
+                                onChange={setToLocation}
+                                onClick={() => setToLocation("")}
+                                rightsection={loading ? <Loader size="xs" /> : <></>}
+                                placeholder="Choose destination airport"
+                                data={autofill_data}
+                                transitionProps={{ transition: 'pop-top-left', duration: 120, timingFunction: 'ease' }}
+                                filter={(value, item) =>
+                                item.value.toLowerCase().includes(value.toLowerCase().trim())
+                                }
+                            />
+                        </MantineProvider>
                     </div>
                     <div className='flex gap-2 mb-4 sm:mb-0'>
                         <DatePicker
@@ -142,7 +197,7 @@ function SearchForm ({darkMode, setFlights}) {
                             onChange={(newValue) => setReturnDate(newValue)}
                         /> : <></>}
                     </div>
-                    <button onClick={() => setMoreFilters(!moreFilters)} className='box-border text-white h-[57px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>{moreFilters? "- Less Filters" : "+ More Filters"}</button>
+                    <p onClick={() => setMoreFilters(!moreFilters)} className='box-border text-white h-[57px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>{moreFilters? "- Less Filters" : "+ More Filters"}</p>
 
                     {/* <div className='flex gap-2 w-[100%] sm:w-auto mb-4 sm:mb-0'>
                         <TextField/>
@@ -163,7 +218,7 @@ function SearchForm ({darkMode, setFlights}) {
                                     { label: 'Economy', value: 'M' },
                                     { label: 'Premium Economy', value: 'W' },
                                     { label: 'First Class', value: 'F' },
-                                    { label: 'Business Class', value: 'B' },
+                                    { label: 'Business Class', value: 'C' },
                                 ]}
                                 className='h-min rounded-full'
                         />

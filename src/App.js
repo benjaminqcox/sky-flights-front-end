@@ -49,8 +49,6 @@ function App() {
     }
   })
 
-  console.log(dummyFlightData)
-
   return (
     
     <ThemeProvider theme={darkMode === "dark" ? darkTheme : lightTheme}>
