@@ -17,6 +17,8 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Button, ButtonBase, IconButton, ThemeProvider, createTheme } from '@mui/material';
 import MuiThemeProvider from '@mui/private-theming/ThemeProvider/ThemeProvider'
 import { MantineProvider } from '@mantine/core';
+import FlightListItem from './components/FlightListItem';
+import dummyFlightData from './dummyFlightData.json'
 import FlightMap from './components/FlightMap';
 import WeatherIcon from './components/WeatherIcon';
 
@@ -50,28 +52,25 @@ function App() {
   })
 
   return (
-      <ThemeProvider theme={darkMode === "dark" ? darkTheme : lightTheme}>
-        <Router>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div className="App">
+    
+    <ThemeProvider theme={darkMode === "dark" ? darkTheme : lightTheme}>
+      <Router>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <div className="App">
+          
             <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
               <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
-
-              <div className='w-[100vw] h-[100vh] flex-col flex justify-center p-0'>
-                <SearchForm darkMode={darkMode}/>
-                {/* <Button className='w-[50%]'>Hello</Button> */}
+              <LandingPage darkMode={darkMode}/>
                 <WeatherIcon />
                 <Routes>
                   <Route path='/map' Component={FlightMap}/>
                 </Routes>
              
-              </div>
-              </div>
             </div>
-            
-          </LocalizationProvider>
-        </Router>
-      </ThemeProvider>
+          </div>  
+        </LocalizationProvider>
+      </Router>
+    </ThemeProvider>
     
    
   );

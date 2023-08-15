@@ -1,0 +1,29 @@
+[
+    {
+        "flyFrom": "London, LHR",
+        "flyTo": "Paris, PRG",
+        "local_departure": "16/08/2023, 16:00PM",
+        "local_arrival": "16/08/2023, 18:00PM",
+        "duration": 2,
+        "fare": 142,
+        "airlines": "British Airways"
+    },
+    {
+        "flyFrom": "London, LHR",
+        "flyTo": "Paris, PRG",
+        "local_departure": "16/08/2023, 16:00PM",
+        "local_arrival": "16/08/2023, 18:00PM",
+        "duration": 2,
+        "fare": 142,
+        "airlines": "British Airways"
+    },
+    {
+        "flyFrom": "London, LHR",
+        "flyTo": "Paris, PRG",
+        "local_departure": "16/08/2023, 16:00PM",
+        "local_arrival": "16/08/2023, 18:00PM",
+        "duration": 2,
+        "fare": 142,
+        "airlines": "British Airways"
+    }
+]

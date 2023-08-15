@@ -13,7 +13,7 @@ import { Button, ButtonBase, IconButton } from '@mui/material';
 function Header ({ loggedIn, darkMode, handleThemeSwitch }) {
 
     return (
-            <header className="flex flex-row border-b-[1px] border-gray-600/30 dark:border-slate-300/30 justify-between self-center fixed w-full top-0 backdrop-blur z-50">
+            <header className="flex flex-row border-b-[1px] border-gray-600/30 dark:border-slate-300/30 justify-between self-center w-full h-[80px] mb-80 sticky top-0 backdrop-blur z-50">
                 <Link to="/"><img src={logo} className='w-[20vh] m-5 rounded-sm'></img></Link>
                 
                 <div className='flex my-auto m-5 gap-3'>
