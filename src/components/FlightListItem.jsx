@@ -18,7 +18,7 @@ function FlightListItem( {darkMode, flightData} ) {
 
     useEffect(() => {
         getAirlineName();
-    }, []);
+    }, [flightData]);
 
     const getAirlineName = async () => {
         try {

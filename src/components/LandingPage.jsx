@@ -26,7 +26,7 @@ function LandingPage({darkMode}) {
 
     return ( 
         <div className='w-[100vw] h-[100vh] -mt-[80px] flex-col flex justify-start p-0'>
-            <SearchForm darkMode={darkMode}/>
+            <SearchForm darkMode={darkMode} setFlights={setListOfFlights}/>
 
             {listOfFlights.map((flight) => {
             return <FlightListItem darkMode={darkMode} flightData={flight}/>

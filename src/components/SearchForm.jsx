@@ -9,9 +9,10 @@ import MultipleSelectCheckmarks from './externalComponents/MultipleSelectCheckma
 import { Slider } from '@mui/material';
 import dayjs from 'dayjs';
 import { HiArrowSmallRight, HiArrowsRightLeft } from 'react-icons/hi2';
+import axios from 'axios';
 
 
-function SearchForm ({darkMode}) {
+function SearchForm ({darkMode, setFlights}) {
     
     const [loading, setLoading] = useState(false);   
     const [moreFilters, setMoreFilters] = useState(false); 
@@ -74,12 +75,22 @@ function SearchForm ({darkMode}) {
         
     }
 
+    const handleSubmit = async function(event) {
+        event.preventDefault();
+        try {
+            const URL = `http://localhost:8081/booking/getFiltered/?flyTo=${toLocation}&flyFrom=${fromLocation}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.toDate().toLocaleDateString()}`
+            const response = await axios.get(URL)
+            await setFlights(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
     
     return (  
 
         <>
             {/* <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}> */}
-            <div className={`text-gray-600 dark:text-gray-300 shadow-lg grid justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] ${moreFilters ? `min-h-[50%]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll`}>
+            <form onSubmit={handleSubmit} className={`text-gray-600 dark:text-gray-300 shadow-lg grid justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] ${moreFilters ? `min-h-[50%]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll`}>
                 
                 <div className='flex justify-evenly sm:justify-around w-[100%] mb-4'>
                     <div className='flex w-[250px] h-min self-end text-xs text-center items-center justify-center sm:justify-normal'>
@@ -229,8 +240,8 @@ function SearchForm ({darkMode}) {
                     </div>
                 </>
                 : <></>}
-                <button className='box-border text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>Submit</button>
-            </div>
+                <button type='submit' className='box-border text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>Submit</button>
+            </form>
             {/* </MantineProvider> */}
         </>
     );
