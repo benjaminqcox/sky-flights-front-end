@@ -9,11 +9,13 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Button, ButtonBase, IconButton } from '@mui/material';
 import Register from './Register';
 import Login from './Login';
+import Account from './Account';
 
 
-function Header ({ loggedIn, darkMode, handleThemeSwitch }) {
-    const [loginPopup, setLoginPopup] = useState(true);
+function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSwitch }) {
+    const [loginPopup, setLoginPopup] = useState(false);
     const [showLoginOrRegister, setShowLoginOrRegister] = useState(false);
+    const [showAccount, setShowAccount] = useState(true);
 
     return (
             <header className="flex flex-row border-b-[1px] border-gray-600/30 dark:border-slate-300/30 justify-between self-center w-full h-[80px] sticky top-0 backdrop-blur z-50">
@@ -24,13 +26,26 @@ function Header ({ loggedIn, darkMode, handleThemeSwitch }) {
                     <IconButton onClick={handleThemeSwitch}>
                         {darkMode === "dark" ? <DarkModeIcon className='dark:text-slate-200'></DarkModeIcon> : <LightModeIcon></LightModeIcon>}
                     </IconButton>
-                    {loggedIn === true ? <Link>
-                        <IconButton>
-                            <p className='text-blue-500 m-auto p-0'>
-                                <AccountCircleIcon fontSize='large' className='rounded-lg '/>
-                            </p>
-                        </IconButton>
-                        </Link> : 
+                    {loggedIn === true ? 
+                        <>
+                        <Link> Hello, {user.firstName}
+                            <IconButton>
+                                <p className='text-blue-500 m-auto p-0'>
+                                   <AccountCircleIcon fontSize='large' className='rounded-lg' onClick={() => setShowAccount(!showAccount)}/>
+                                </p>
+                            </IconButton>
+                        </Link>
+                        {
+                            showAccount ? 
+                            <>
+                                <Account user={user} darkMode={darkMode}/>
+                            </>
+                            :
+                            <>
+                            </>
+                        }
+                        </>
+                        : 
                         <>
                             <Link to="/login">
                                 <button className='box-border text-gray-500 dark:text-slate-200 h-[40px] my-auto font-semibold border-gray-600/30 dark:border-slate-200/30 border-[1px] rounded-lg px-3 bg-opacity-0 dark:bg-opacity-0 hover:bg-opacity-100 dark:hover:bg-opacity-100 hover:border-blue-500 dark:hover:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'
@@ -47,7 +62,7 @@ function Header ({ loggedIn, darkMode, handleThemeSwitch }) {
                                         </>
                                         :
                                         <>
-                                            <Register darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister}/>
+                                            <Register darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser}/>
                                         </>
                                     }
                                 </>

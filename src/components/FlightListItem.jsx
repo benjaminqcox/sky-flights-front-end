@@ -17,13 +17,14 @@ import { Modal } from '@mui/material';
 import FlightMap from './FlightMap';
 import WeatherIcon from './WeatherIcon';
 
-function FlightListItem( {darkMode, flightData, returnFlight} ) {
+function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurrency} ) {
     const [moreInfo, setMoreInfo] = useState(false);
     const [airlineName, setAirlineName] = useState("");
     const [airlineLogo, setAirlineLogo] = useState("");
     const [countryImage, setCountryImage] = useState("");
     const [open, setOpen] = useState(false);
     const [coordinates, setCoordinates] = useState([]);
+    const [currencySymbol, setCurrencySymbol] = useState("£");
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -38,6 +39,7 @@ function FlightListItem( {darkMode, flightData, returnFlight} ) {
         const airportTo = airportsJson.find((airport) => airport.iata == flightData.flyTo);
         setCoordinates([[airportFrom.lat, airportFrom.lon], [airportTo.lat, airportTo.lon]])
         setMoreInfo(false);
+        getCurrencySymbol();
         // setSingleOrReturn(flightData.airline[0] ? false : true);
     }, [flightData]);
 
@@ -52,6 +54,12 @@ function FlightListItem( {darkMode, flightData, returnFlight} ) {
         const response2 = await axios.get(`https://api.unsplash.com/search/photos?page=1&query=${flightData.cityTo}&client_id=K4KeY0zjsNDVng4XwKq1waPyiQ89-Ix3gMoo_CTMwZ8`)
         console.log("unsplash: ", response2.data)
         setCountryImage(response2.data.results[Math.floor(Math.random() * 10)].urls.small);
+    }
+
+    const getCurrencySymbol = () => {
+        const symbol = currency.slice(-3).slice(currency.length);
+        const symbol2 = currency.substring(currency.length - 2, currency.length - 1)
+        setCurrencySymbol(symbol2);
     }
 
     const departureDate = flightData.local_departure.substring(0, flightData.local_departure.indexOf("T"));
@@ -183,7 +191,7 @@ function FlightListItem( {darkMode, flightData, returnFlight} ) {
                     }}/>
                     </div>
                     <p className='border-0 border-solid font-bold border-black text-2xl'>
-                      £{flightData.fare.adults}  
+                      {currencySymbol}{flightData.fare.adults}  
                     </p>
 
                     {flightData.availability.seats ? <p className='border-0 border-solid border-black'>{flightData.availability.seats} Tickets remaining</p> : <p className='border-0 border-solid border-black'></p>}

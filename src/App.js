@@ -26,6 +26,7 @@ function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [darkMode, setDarkMode] = useState("dark");
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     if (darkMode === "dark") {
@@ -58,8 +59,8 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div className="App">
           
-            <div className=' bg-white dark:bg-[#202124] transition-all duration-300 h-[100%]'>
-              <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
+            <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
+              <Header user={user} setUser={setUser} loggedIn={loggedIn} setLoggedIn={setLoggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
               <LandingPage darkMode={darkMode}/>
                 {/* <WeatherIcon /> */}
                 <Routes>
