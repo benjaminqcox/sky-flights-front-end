@@ -12,9 +12,11 @@ import { HiArrowSmallRight, HiArrowsRightLeft } from 'react-icons/hi2';
 import axios from 'axios';
 import airports from '../airports.json';
 import { Group, Text, MantineColor, SelectItemProps, Autocomplete } from '@mantine/core';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 
-function SearchForm ({darkMode, setFlights}) {
+function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, returnFlight, setReturnFlight}) {
     
     const [loading, setLoading] = useState(false);   
     const [moreFilters, setMoreFilters] = useState(false); 
@@ -30,8 +32,6 @@ function SearchForm ({darkMode, setFlights}) {
     const [cabin, setCabin] = useState("M");
     const [stopovers, setStopovers] = useState(0);
     const [travelDays, setTravelDays] = useState();
-
-    const [returnFlight, setReturnFlight] = useState(false);
 
     const [value2, setValue2] = useState([0, 3000]);
     const minDistance = 200;
@@ -53,7 +53,13 @@ function SearchForm ({darkMode, setFlights}) {
         }
     }
 
-    
+    const handleAdultChange = (adultInputVal) => {
+        setAdultValue(adultInputVal);
+    }
+
+    const handleChildChange = (childInputValue) => {
+        setChildrenValue(childInputValue)
+    }
 
     const handleChange2 = (event, newValue, activeThumb) => {
         if (!Array.isArray(newValue)) {
@@ -83,6 +89,8 @@ function SearchForm ({darkMode, setFlights}) {
 
     const handleSubmit = async function(event) {
         event.preventDefault();
+        setFlightListLoading(true);
+        setError(false);
         try {
             if (!moreFilters) {
                 const URL = `http://localhost:8081/booking/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
@@ -107,19 +115,21 @@ function SearchForm ({darkMode, setFlights}) {
                 const response = await axios.get(URL)
                 console.log(response);
                 await setFlights(response.data);
+                if (response.data.length == 0) { setError(true) }
             }
                 
         } catch (error) {
             console.error(error);
+            setError(true)
         }
+        setFlightListLoading(false);
     }
 
     return (  
 
         <>
             {/* <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}> */}
-            <form onSubmit={handleSubmit} className={`text-gray-600 dark:text-gray-300 shadow-lg grid justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] ${moreFilters ? `min-h-[50%]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll`}>
-                
+            <form onSubmit={handleSubmit} className={`text-gray-600 dark:text-gray-300 shadow-lg gap-5 p-8 grid justify-items-center items-start border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] ${moreFilters ? `min-h-[90%]` : `min-h-[40%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll sm:overflow-hidden`}>
                 <div className='flex justify-evenly sm:justify-around w-[100%] mb-4'>
                     <div className='flex w-[250px] h-min self-end text-xs text-center items-center justify-center sm:justify-normal'>
                         <p className={`flex gap-1 ${!returnFlight ? 'text-blue-500 dark:text-blue-300' : ''}`}>One-way<HiArrowSmallRight fontSize={'1.2rem'}/></p>
@@ -137,7 +147,7 @@ function SearchForm ({darkMode, setFlights}) {
                 </div>
                 
                 
-                <div className='sm:flex self-center w-[80%] h-min mx-auto gap-2'>
+                <div className='sm:flex self-start w-[80%] h-min mx-auto gap-2'>
                     <div className='flex gap-2 w-[100%] sm:w-auto mb-4 sm:mb-0'>
                         {/* <TextField
                             className='mx-auto h-max w-[50%] sm:w-auto'
@@ -146,15 +156,16 @@ function SearchForm ({darkMode, setFlights}) {
                             onChange={(e) => setFromLocation(e.target.value)}
                             rightsection={loading ? <Loader size="xs" /> : <></>}
                         /> */}
-                        <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
+                        <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}`}}>
                             <Autocomplete
                                 size='lg'
-                                classNames={{ item: 'text-sm whitespace-prewrap break-normal' }}
+                                classNames={{ item: 'text-sm whitespace-prewrap break-normal', input:'transition-all duration-200' }}
                                 className='mx-auto w-[50%] sm:w-auto'
                                 value={fromLocation}
                                 onChange={setFromLocation}
                                 onClick={() => {setFromLocation("")}}
                                 rightsection={loading ? <Loader size="xs" /> : <></>}
+                                required
                                 placeholder="Choose start airport"
                                 data={autofill_data}
                                 transitionProps={{ transition: 'pop-top-left', duration: 120, timingFunction: 'ease' }}
@@ -166,12 +177,13 @@ function SearchForm ({darkMode, setFlights}) {
                         <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
                             <Autocomplete
                                 size='lg'
-                                classNames={{ item: 'text-sm whitespace-prewrap break-normal' }}
+                                classNames={{ item: 'text-sm whitespace-prewrap break-normal', input:'transition-all duration-200' }}
                                 className='mx-auto w-[50%] sm:w-auto'
                                 value={toLocation}
                                 onChange={setToLocation}
                                 onClick={() => setToLocation("")}
                                 rightsection={loading ? <Loader size="xs" /> : <></>}
+                                required
                                 placeholder="Choose destination airport"
                                 data={autofill_data}
                                 transitionProps={{ transition: 'pop-top-left', duration: 120, timingFunction: 'ease' }}
@@ -186,6 +198,8 @@ function SearchForm ({darkMode, setFlights}) {
                             label="Departing"
                             defaultValue={dayjs()}
                             value={departureDate}
+                            minDate={dayjs()}
+                            
                             maxDate={returnDate ? returnDate.subtract(1, "days") : ''}
                             onChange={(newValue) => setDepartureDate(newValue)}
                         />
@@ -197,7 +211,7 @@ function SearchForm ({darkMode, setFlights}) {
                             onChange={(newValue) => setReturnDate(newValue)}
                         /> : <></>}
                     </div>
-                    <p onClick={() => setMoreFilters(!moreFilters)} className='box-border text-white h-[57px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>{moreFilters? "- Less Filters" : "+ More Filters"}</p>
+                    <p onClick={() => setMoreFilters(!moreFilters)} className='box-border text-white h-[57px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px] cursor-pointer w-[20%] text-sm flex items-center'>{moreFilters ? <p><RemoveIcon/> Less Filters</p> : <p><AddIcon/> More Filters</p>}</p>
 
                     {/* <div className='flex gap-2 w-[100%] sm:w-auto mb-4 sm:mb-0'>
                         <TextField/>
@@ -220,7 +234,7 @@ function SearchForm ({darkMode, setFlights}) {
                                     { label: 'First Class', value: 'F' },
                                     { label: 'Business Class', value: 'C' },
                                 ]}
-                                className='h-min rounded-full'
+                                className='h-min rounded-full transition-all duration-200'
                         />
                         </MantineProvider>
                     </div>
@@ -232,17 +246,17 @@ function SearchForm ({darkMode, setFlights}) {
 
                             <div className='sm:flex self-center h-min gap-2 my-1'>
                                 <p className="text-lg self-center text-end font-['Roboto'] font-light tracking-wide w-[80px]">Adults</p>
-                                <MantineNumberInput value={adultValue} setValue={setAdultValue}/>
+                                <MantineNumberInput value={adultValue} setValue={handleAdultChange} adult={true} oppValue={childrenValue}/>
                             </div>
                             <div className='sm:flex self-center h-min gap-2 my-1'>
                                 <p className="text-lg self-center text-end font-['Roboto'] font-light tracking-wide w-[80px]">Children</p>
-                                <MantineNumberInput value={childrenValue} setValue={setChildrenValue}/>
+                                <MantineNumberInput value={childrenValue} setValue={handleChildChange} adult={false} oppValue={adultValue}/>
                             </div>
 
-                            <div className='sm:flex self-center h-min gap-2 my-1'>
+                            {/* <div className='sm:flex self-center h-min gap-2 my-1'>
                                 <p className=" text-lg self-center text-end font-['Roboto'] font-light tracking-wide w-[80px]">Infants</p>
-                                <MantineNumberInput value={infantsValue} setValue={setInfantsValue}/>
-                            </div>
+                                <MantineNumberInput value={infantsValue} setValue={setInfantsValue} className={'transition-all duration-200'}/>
+                            </div> */}
                             </MantineProvider>
                         </div>
 
@@ -289,7 +303,8 @@ function SearchForm ({darkMode, setFlights}) {
                                         { label: 'Travel on weekends only', value: 'weekends' },
                                         { label: 'Travel on any day', value: 'both' },
                                     ]}
-                                    className='h-min rounded-full'
+                                    className='h-min rounded-full transition-all duration-200'
+
                             />
                         </MantineProvider>
                     </div>

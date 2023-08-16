@@ -4,8 +4,17 @@ html,body
     height: 100%;
     margin: 0px;
     padding: 0px;
-    overflow-x: hidden; 
+    overflow-x: hidden;
+    background-color: white;
 }
+
+#root {
+  height: 100%;
+}
+
+/* .dark html, body {
+  background-color: #202124;
+} */
 
 .App {
   text-align: center;

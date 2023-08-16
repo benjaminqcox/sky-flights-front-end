@@ -17,13 +17,13 @@ import { Modal } from '@mui/material';
 import FlightMap from './FlightMap';
 import WeatherIcon from './WeatherIcon';
 
-function FlightListItem( {darkMode, flightData} ) {
+function FlightListItem( {darkMode, flightData, returnFlight} ) {
     const [moreInfo, setMoreInfo] = useState(false);
     const [airlineName, setAirlineName] = useState("");
     const [airlineLogo, setAirlineLogo] = useState("");
     const [countryImage, setCountryImage] = useState("");
     const [open, setOpen] = useState(false);
-    const [coordinates, setCoordinates] = useState([])
+    const [coordinates, setCoordinates] = useState([]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -38,6 +38,7 @@ function FlightListItem( {darkMode, flightData} ) {
         const airportTo = airportsJson.find((airport) => airport.iata == flightData.flyTo);
         setCoordinates([[airportFrom.lat, airportFrom.lon], [airportTo.lat, airportTo.lon]])
         setMoreInfo(false);
+        // setSingleOrReturn(flightData.airline[0] ? false : true);
     }, [flightData]);
 
     const getAirlineInfo = (aName) => {
@@ -65,9 +66,9 @@ function FlightListItem( {darkMode, flightData} ) {
 
     return ( 
         <>
-            <div className={`text-gray-600 place-items-stretch dark:text-gray-300 shadow-lg justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] h-[80vh] sm:h-[20vw] min-h-[330px] transition-all duration-300 ease-out mt-5 flex flex-col sm:flex-row mx-auto   ${moreInfo ? `min-h-[50%]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll sm:overflow-hidden`}>
-                <div className='p-0 relative text-left border-0 border-solid border-black sm:w-[37%]'>
-                    <div className='flex items-end justify-center p-3 absolute top-4 left-4 z-50 rounded-full bg-black/50'>
+            <div className={`text-gray-600 place-items-stretch dark:text-gray-300 shadow-lg justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] h-[80vh] sm:h-[20vw] min-h-[330px] transition-all duration-300 ease-out mt-5 flex flex-col sm:flex-row mx-auto   ${moreInfo ? `min-h-[480px]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll sm:overflow-hidden dark:bg-[#202124]`}>
+                <div className='p-0 group overflow-hidden relative text-left border-0 border-solid border-white sm:w-[37%]'>
+                    <div className='flex items-end justify-center p-3 absolute top-4 left-4 z-10 rounded-full bg-black/50'>
                         <p className='text-l font-semibold mb-1 text-slate-200'>
                             {airlineName}  
                         </p>
@@ -84,9 +85,10 @@ function FlightListItem( {darkMode, flightData} ) {
                     {/* <div className='bg-gray-500 h-[85%] rounded-xl'> */}
                     <img    
                             src={countryImage}
-                            className=' rounded-tr-none rounded-br-none object-cover object-top h-[100%] w-full hover:scale-105 transition duration-150 cursor-pointer'
-                            onClick={handleOpen}
+                            className='z-0 group-hover:scale-110 rounded-tr-none rounded-br-none object-cover object-top h-[100%] w-full transition duration-150 ease-out cursor-pointer '
                         />
+                    <div class="opacity-0 peer hover:opacity-100 duration-200 absolute inset-0 z-0 flex justify-center items-center text-xl text-white font-semibold bg-black/60 cursor-pointer"
+                        onClick={handleOpen}>View in interactive map</div>
                     <Modal
                         open={open}
                         onClose={handleClose}
@@ -95,28 +97,82 @@ function FlightListItem( {darkMode, flightData} ) {
                     </Modal>
                     {/* </div> */}
                 </div>
-                <div className='border-0 border-solid border-black sm:w-[37%] pt-12 pl-5'>
-                    <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
-                        <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[350px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
-                            <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
-                                <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
-                                <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 3600) + ' hours'}</Text>
-                            </Timeline.Item>
+                {
+                    returnFlight ? 
+                    <>
+                        <div className={`border-0 border-solid border-black sm:w-[37%] pt-12 ${moreInfo ? ' pl-32' : 'pl-5'} transition-all duration-300`}>
+                            <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
+                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[350px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
+                                        <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
+                                        <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 3600) + ' hours'}</Text>
+                                    </Timeline.Item>
 
-                            {/* <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG"  lineVariant="dashed">
-                                <Text color="dimmed" size="sm">18:00<Text variant="link" component="span" inherit></Text></Text>
-                            </Timeline.Item>
-                            <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG" >
-                                <Text color="dimmed" size="sm">18:00<Text variant="link" component="span" inherit></Text></Text>
-                                <Text size="xs" mt={4}>4 hours left</Text>
-                            </Timeline.Item> */}
+                                    {/* <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG"  lineVariant="dashed">
+                                        <Text color="dimmed" size="sm">18:00<Text variant="link" component="span" inherit></Text></Text>
+                                    </Timeline.Item>
+                                    <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG" >
+                                        <Text color="dimmed" size="sm">18:00<Text variant="link" component="span" inherit></Text></Text>
+                                        <Text size="xs" mt={4}>4 hours left</Text>
+                                    </Timeline.Item> */}
 
-                            <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
-                                <Text color="dimmed" size="sm" className='font-bold'>{arrivalTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDate}</Text></Text>
-                            </Timeline.Item>
-                        </Timeline>
-                    </MantineProvider>
-                </div>
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
+                                        <Text color="dimmed" size="sm" className='font-bold'>{arrivalTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDate}</Text></Text>
+                                    </Timeline.Item>
+                                </Timeline>
+                            </MantineProvider>
+                        </div>
+
+                        <div className={`border-0 border-solid border-black sm:w-[37%] pt-12 ${moreInfo ? ' pl-32' : 'pl-5'} transition-all duration-300`}>
+                            <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
+                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[350px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
+                                        <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
+                                        <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 3600) + ' hours'}</Text>
+                                    </Timeline.Item>
+
+                                    {/* <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG"  lineVariant="dashed">
+                                        <Text color="dimmed" size="sm">18:00<Text variant="link" component="span" inherit></Text></Text>
+                                    </Timeline.Item>
+                                    <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG" >
+                                        <Text color="dimmed" size="sm">18:00<Text variant="link" component="span" inherit></Text></Text>
+                                        <Text size="xs" mt={4}>4 hours left</Text>
+                                    </Timeline.Item> */}
+
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
+                                        <Text color="dimmed" size="sm" className='font-bold'>{arrivalTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDate}</Text></Text>
+                                    </Timeline.Item>
+                                </Timeline>
+                            </MantineProvider>
+                        </div>
+                    </>
+                    :
+                    <>
+                        <div className={`border-0 border-solid border-black sm:w-[37%] pt-12 ${moreInfo ? ' pl-32' : 'pl-5'} transition-all duration-300`}>
+                            <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
+                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[350px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
+                                        <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
+                                        <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 3600) + ' hours'}</Text>
+                                    </Timeline.Item>
+
+                                    {/* <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG"  lineVariant="dashed">
+                                        <Text color="dimmed" size="sm">18:00<Text variant="link" component="span" inherit></Text></Text>
+                                    </Timeline.Item>
+                                    <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG" >
+                                        <Text color="dimmed" size="sm">18:00<Text variant="link" component="span" inherit></Text></Text>
+                                        <Text size="xs" mt={4}>4 hours left</Text>
+                                    </Timeline.Item> */}
+
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
+                                        <Text color="dimmed" size="sm" className='font-bold'>{arrivalTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDate}</Text></Text>
+                                    </Timeline.Item>
+                                </Timeline>
+                            </MantineProvider>
+                        </div>
+                    </>
+                }
+
                 <div className=' relative flex flex-col text-right border-0 border-solid border-black sm:w-[26%] pt-12 pl-7 pr-7 items-end'>
                     <div className='float-right mb-5'>
                     <Checkbox style={{transform: "scale(1.5)"}} icon={<FavoriteBorder/>} checkedIcon={<Favorite/>} sx={{

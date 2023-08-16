@@ -59,7 +59,7 @@ const WeatherIcon = ({date, latitude, longitude}) => { //needs params of latitud
                     // <p style={{textAlign: 'left', color: 'white'}}>{`Date: ${weatherInfo.date}`}</p>
                     // <p style={{textAlign: 'left', color: 'white'}}>{`Description: ${weatherInfo.day.condition.text}`}</p>
                     // <p style={{textAlign: 'left', color: 'white'}}>{`Average temp: ${weatherInfo.day.avgtemp_c}°C`}</p>
-                    <p className=" transition-all flex rounded-xl bg-black/60 px-3 -translate-x-12 items-center text-bold">{weatherInfo.day.avgtemp_c}°C<img src={weatherInfo.day.condition.icon} /></p>
+                    <p className=" transition-all  flex rounded-xl bg-black/60 px-3 -translate-x-12 items-center text-bold">{weatherInfo.day.avgtemp_c}°C<img src={weatherInfo.day.condition.icon} /></p>
                 // </div>
                 
             }

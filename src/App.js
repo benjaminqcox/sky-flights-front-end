@@ -58,14 +58,14 @@ function App() {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <div className="App">
           
-            <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
+            <div className=' bg-white dark:bg-[#202124] transition-all duration-300 h-[100%]'>
               <Header loggedIn={loggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
               <LandingPage darkMode={darkMode}/>
                 {/* <WeatherIcon /> */}
                 <Routes>
                   <Route path='/map' Component={FlightMap}/>
                 </Routes>
-             
+              
             </div>
           </div>  
         </LocalizationProvider>
