@@ -21,12 +21,28 @@ import FlightListItem from './components/FlightListItem';
 import dummyFlightData from './dummyFlightData.json'
 import FlightMap from './components/FlightMap';
 import WeatherIcon from './components/WeatherIcon';
+import axios from 'axios';
 
 function App() {
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [darkMode, setDarkMode] = useState("dark");
   const [user, setUser] = useState({});
+
+  const checkUser = async () => {
+    try {
+      const URL = `http://localhost:8080/users/user`;
+      const response = await axios.get(URL, { withCredentials: true });
+      setLoggedIn(() => true);
+      setUser(() => response.data);
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    checkUser()
+  }, []);
 
   useEffect(() => {
     if (darkMode === "dark") {

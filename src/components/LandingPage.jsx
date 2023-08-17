@@ -20,8 +20,8 @@ function LandingPage({darkMode}) {
     const getFlights = async () => {
         try {
             setLoading(true);
-            const URL = `http://localhost:8081/booking/getFiltered/?flyTo=JFK&flyFrom=LHR&leaveDateFrom=30/08/2023&leaveDateTo=30/08/2023&numberOfAdults=7`;
-            const response = await axios.get(URL);
+            const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=JFK&flyFrom=LHR&leaveDateFrom=30/08/2023&leaveDateTo=30/08/2023&numberOfAdults=7`;
+            const response = await axios.get(URL, { withCredentials: true });
             setListOfFlights(response.data)
             setLoading(false);
         } catch (error) {

@@ -75,7 +75,7 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
 
         try {
             // setLoading(true);
-            const URL = `http://localhost:8081/users/register`;
+            const URL = `http://localhost:8080/users/register`;
             const response = await axios.post(URL, {
                 firstName: firstName,
                 lastName: lastName,

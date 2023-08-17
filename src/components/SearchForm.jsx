@@ -93,9 +93,9 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
         setError(false);
         try {
             if (!moreFilters) {
-                const URL = `http://localhost:8081/booking/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
                 console.log(URL);
-                const response = await axios.get(URL)
+                const response = await axios.get(URL, { withCredentials: true })
                 console.log(response);
                 await setFlights(response.data);
             } else {
@@ -111,8 +111,8 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                 }
                 console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
                 console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
-                const URL = `http://localhost:8081/booking/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
-                const response = await axios.get(URL)
+                const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                const response = await axios.get(URL, { withCredentials: true })
                 console.log(response);
                 await setFlights(response.data);
                 if (response.data.length == 0) { setError(true) }

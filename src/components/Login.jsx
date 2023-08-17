@@ -4,10 +4,9 @@ import { Autocomplete, MantineProvider } from "@mantine/core";
 import { useDisclosure } from '@mantine/hooks';
 import { PasswordInput, Stack, TextInput } from '@mantine/core';
 import { IconAt } from '@tabler/icons-react';
-import Login from './Login';
 import axios from "axios";
 
-function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLoggedIn, setUser}){
+function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLoggedIn, setUser}){
     const [username, setUsername] = useState('');
 
     const [password, setPassword] = useState("");
@@ -19,19 +18,16 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
         loginForm.append("username", username);
         loginForm.append("password", password)
         try {
-            const URL = `http://localhost:8081/login`;
-            const response = await axios.post(URL, loginForm, {
-                withCredentials: true                
-            });
-            console.log(response.data);
+            const URL = `http://localhost:8080/login`;
+            const response = await axios.post(URL, loginForm);
+            console.log("Login response data: ", response.data);
             setLoggedIn(() => true);
             setUser(() => response.data);
-
-            setUsername("");
-            setPassword("");
         } catch (error) {
             console.log(error);
         }
+        setUsername("");
+        setPassword("");
     }
 
     return (
@@ -76,4 +72,4 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
     )
 }
 
-export default Register;
+export default Login;
