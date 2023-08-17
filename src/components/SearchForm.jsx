@@ -159,13 +159,18 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                         <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}`}}>
                             <Autocomplete
                                 size='lg'
-                                classNames={{ item: 'text-sm whitespace-prewrap break-normal', input:'transition-all duration-200' }}
+                                classNames={{ 
+                                    item: 'text-sm whitespace-prewrap break-normal', 
+                                    input:'transition-all duration-200',
+                                    dropdown: 'overflow-y-scroll max-h-[450px]'
+                                }}
                                 className='mx-auto w-[50%] sm:w-auto'
                                 value={fromLocation}
                                 onChange={setFromLocation}
                                 onClick={() => {setFromLocation("")}}
                                 rightsection={loading ? <Loader size="xs" /> : <></>}
                                 required
+                                limit={20}
                                 placeholder="Choose start airport"
                                 data={autofill_data}
                                 transitionProps={{ transition: 'pop-top-left', duration: 120, timingFunction: 'ease' }}
@@ -177,13 +182,18 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                         <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
                             <Autocomplete
                                 size='lg'
-                                classNames={{ item: 'text-sm whitespace-prewrap break-normal', input:'transition-all duration-200' }}
+                                classNames={{ 
+                                    item: 'text-sm whitespace-prewrap break-normal',
+                                    input:'transition-all duration-200',
+                                    dropdown: 'overflow-y-scroll max-h-[450px]'
+                                }}
                                 className='mx-auto w-[50%] sm:w-auto'
                                 value={toLocation}
                                 onChange={setToLocation}
                                 onClick={() => setToLocation("")}
                                 rightsection={loading ? <Loader size="xs" /> : <></>}
                                 required
+                                limit={20}
                                 placeholder="Choose destination airport"
                                 data={autofill_data}
                                 transitionProps={{ transition: 'pop-top-left', duration: 120, timingFunction: 'ease' }}

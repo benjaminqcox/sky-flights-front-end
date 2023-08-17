@@ -74,7 +74,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
 
     return ( 
         <>
-            <div className={`text-gray-600 place-items-stretch dark:text-gray-300 shadow-lg justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] h-[80vh] sm:h-[20vw] min-h-[330px] transition-all duration-300 ease-out mt-5 flex flex-col sm:flex-row mx-auto   ${moreInfo ? `min-h-[480px]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll sm:overflow-hidden dark:bg-[#202124]`}>
+            <div className={`text-gray-600 place-items-stretch dark:text-gray-300 shadow-lg justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] h-[80vh] sm:h-[20vw] min-h-[330px] transition-all duration-300 ease-out mt-5 flex flex-col sm:flex-row mx-auto   ${moreInfo ? `min-h-[480px]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll sm:overflow-hidden dark:bg-[#202124] animate-in slide-in-from-bottom fade-in ease-in-out`}>
                 <div className='p-0 group overflow-hidden relative text-left border-0 border-solid border-white sm:w-[37%]'>
                     <div className='flex items-end justify-center p-3 absolute top-4 left-4 z-10 rounded-full bg-black/50'>
                         <p className='text-l font-semibold mb-1 text-slate-200'>

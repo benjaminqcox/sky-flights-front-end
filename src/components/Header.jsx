@@ -10,7 +10,7 @@ import { Button, ButtonBase, IconButton } from '@mui/material';
 import Register from './Register';
 import Login from './Login';
 import Account from './Account';
-
+import { motion, AnimatePresence } from "framer-motion";
 
 function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSwitch }) {
     const [loginPopup, setLoginPopup] = useState(false);
@@ -52,6 +52,7 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
                                         onClick={() => setLoginPopup(!loginPopup)}>Login/Register</button>
                             </Link>
 
+                            
                             {
                                 loginPopup ?
                                 <>
@@ -62,7 +63,8 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
                                         </>
                                         :
                                         <>
-                                            <Register darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser}/>
+                                            
+                                                <Register key={1} darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser}/>
                                         </>
                                     }
                                 </>
@@ -70,6 +72,7 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
                                 <>
                                 </>
                             }
+
                         </>
                     }
                 </div>
