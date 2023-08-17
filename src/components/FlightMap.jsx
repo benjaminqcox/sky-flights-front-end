@@ -54,10 +54,6 @@ const FlightMap = (  coords  ) => {
 
     return (
         <>
-            console.log(coords.coords[0][0])
-
-
-
             {coords.coords.length &&
                 <MapContainer center={[(parseFloat(coords.coords[0][0]) + parseFloat(coords.coords[1][0]))/2, (parseFloat(coords.coords[0][1]) + parseFloat(coords.coords[1][1]))/2] } zoom={2} scrollWheelZoom={true}>
                 {coords.coords.map((latLng) => <Marker key={latLng[0]} position={latLng}/>)}

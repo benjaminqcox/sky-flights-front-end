@@ -16,7 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 
-function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, returnFlight, setReturnFlight, currency, setCurrency}) {
+function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, returnFlight, setReturnFlight, currency, setCurrency, adultValue, setAdultValue, childrenValue, setChildrenValue}) {
     
     const [loading, setLoading] = useState(false);   
     const [moreFilters, setMoreFilters] = useState(false); 
@@ -26,14 +26,14 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
     const [toLocation, setToLocation] = useState("");
     const [departureDate, setDepartureDate] = useState(dayjs());
     const [returnDate, setReturnDate] = useState(null);
-    const [adultValue, setAdultValue] = useState(1);
-    const [childrenValue, setChildrenValue] = useState(0);
+    // const [adultValue, setAdultValue] = useState(1);
+    // const [childrenValue, setChildrenValue] = useState(0);
     const [infantsValue, setInfantsValue] = useState(0);
     const [cabin, setCabin] = useState("M");
     const [stopovers, setStopovers] = useState('0');
     const [travelDays, setTravelDays] = useState();
 
-    const [value2, setValue2] = useState([0, 5000]);
+    const [value2, setValue2] = useState([0, 8000]);
     const minDistance = 200;
 
     function valuetext(value) {
@@ -68,7 +68,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
 
         if (newValue[1] - newValue[0] < minDistance) {
             if (activeThumb === 0) {
-                const clamped = Math.min(newValue[0], 5000 - minDistance);
+                const clamped = Math.min(newValue[0], 8000 - minDistance);
                 setValue2([clamped, clamped + minDistance]);
             } else {
                 const clamped = Math.max(newValue[1], minDistance);
@@ -84,6 +84,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
             setReturnDate(null);
         }
         setReturnFlight(e.target.checked);
+        setFlights([]);
         
     }
 
@@ -92,31 +93,61 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
         setFlightListLoading(true);
         setError(false);
         try {
-            if (!moreFilters) {
-                const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
-                console.log(URL);
-                const response = await axios.get(URL, { withCredentials: true })
-                console.log(response);
-                await setFlights(response.data);
-            } else {
-                let isWeekdaysOnly = false;
-                let isWeekendsOnly = false;
-                if (travelDays === "weekdays") {
-                    isWeekdaysOnly = true;
-                } else if (travelDays === "weekends") {
-                    isWeekendsOnly = true;
-                } else if (travelDays === "both") {
-                    isWeekdaysOnly = false;
-                    isWeekendsOnly = false;
+            if (!returnFlight) {
+                if (!moreFilters) {
+                    const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                    console.log(URL);
+                    const response = await axios.get(URL, { withCredentials: true })
+                    console.log(response);
+                    await setFlights(response.data);
+                } else {
+                    let isWeekdaysOnly = false;
+                    let isWeekendsOnly = false;
+                    if (travelDays === "weekdays") {
+                        isWeekdaysOnly = true;
+                    } else if (travelDays === "weekends") {
+                        isWeekendsOnly = true;
+                    } else if (travelDays === "both") {
+                        isWeekdaysOnly = false;
+                        isWeekendsOnly = false;
+                    }
+                    console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
+                    console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
+                    const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                    const response = await axios.get(URL, { withCredentials: true })
+                    console.log(response);
+                    await setFlights(response.data);
+                    if (response.data.length == 0) { setError(true) }
                 }
-                console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
-                console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
-                const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
-                const response = await axios.get(URL, { withCredentials: true })
-                console.log(response);
-                await setFlights(response.data);
-                if (response.data.length == 0) { setError(true) }
             }
+            else {
+                if (!moreFilters) {
+                    const URL = `http://localhost:8080/booking/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                    console.log(URL);
+                    const response = await axios.get(URL, { withCredentials: true })
+                    console.log(response);
+                    await setFlights(response.data);
+                } else {
+                    let isWeekdaysOnly = false;
+                    let isWeekendsOnly = false;
+                    if (travelDays === "weekdays") {
+                        isWeekdaysOnly = true;
+                    } else if (travelDays === "weekends") {
+                        isWeekendsOnly = true;
+                    } else if (travelDays === "both") {
+                        isWeekdaysOnly = false;
+                        isWeekendsOnly = false;
+                    }
+                    console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
+                    console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
+                    const URL = `http://localhost:8080/booking/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                    const response = await axios.get(URL, { withCredentials: true })
+                    console.log(response);
+                    await setFlights(response.data);
+                    if (response.data.length == 0) { setError(true) }
+                }
+            }
+            
                 
         } catch (error) {
             console.error(error);
@@ -318,7 +349,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                     value={value2}
                                     onChange={handleChange2}
                                     valueLabelDisplay="auto"
-                                    max={5000}
+                                    max={8000}
                                     getAriaValueText={valuetext}
 
                                     

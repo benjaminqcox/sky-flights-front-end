@@ -28,7 +28,7 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
                     </IconButton>
                     {loggedIn === true ? 
                         <>
-                        <Link> Hello, {user.firstName}
+                        <Link> Hello, {user}
                             <IconButton>
                                 <p className='text-blue-500 m-auto p-0'>
                                    <AccountCircleIcon fontSize='large' className='rounded-lg' onClick={() => setShowAccount(!showAccount)}/>

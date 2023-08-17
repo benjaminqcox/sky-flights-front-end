@@ -19,7 +19,7 @@ function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLogge
         loginForm.append("password", password)
         try {
             const URL = `http://localhost:8080/login`;
-            const response = await axios.post(URL, loginForm);
+            const response = await axios.post(URL, loginForm, { withCredentials: true });
             console.log("Login response data: ", response.data);
             setLoggedIn(() => true);
             setUser(() => response.data);
