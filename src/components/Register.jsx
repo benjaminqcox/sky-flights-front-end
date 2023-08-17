@@ -96,8 +96,9 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
 
 
     return (
+        
         <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
-            <form className={`bg-white dark:bg-[#202124] text-gray-600 place-items-stretch dark:text-gray-300 shadow-2xl justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[500px] max-w-[70%] h-[30vh] sm:h-[30vh] min-h-[600px] transition-all duration-300 ease-out mt-5 flex flex-col p-5 gap-3 mx-auto absolute right-5 top-[80px] z-50`}
+            <form className={`bg-white dark:bg-[#202124] text-gray-600 place-items-stretch dark:text-gray-300 shadow-2xl justify-items-center border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[500px] max-w-[70%] h-[30vh] sm:h-[30vh] min-h-[600px] transition-all duration-500 mt-5 flex flex-col p-5 gap-3 mx-auto absolute right-5 top-[80px] z-50 animate-in slide-in-from-top fade-in ease-in-out `}
                 onSubmit={handleSubmit}
                 >
                 <p className="sm:text-3xl font-['Roboto'] font-light">Register</p>
@@ -225,6 +226,7 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
                 <p className="sm:text-sg font-['Roboto'] font-light" onClick={() => setShowLoginOrRegister(!showLoginOrRegister)}>Already have an account? <u className="text-blue-600 cursor-pointer">Log in</u></p>
             </form>
         </MantineProvider>
+
     )
 }
 
