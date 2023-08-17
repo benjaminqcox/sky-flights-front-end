@@ -59,7 +59,7 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
                                     {
                                         showLoginOrRegister ? 
                                         <>
-                                            <Login darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister}/>
+                                            <Login darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser}/>
                                         </>
                                         :
                                         <>
