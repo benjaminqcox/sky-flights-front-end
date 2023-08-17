@@ -21,7 +21,7 @@ import FlightListItem from './components/FlightListItem';
 import dummyFlightData from './dummyFlightData.json'
 import FlightMap from './components/FlightMap';
 import WeatherIcon from './components/WeatherIcon';
-import Bookings from './components/Bookings';
+import Booking from './components/Bookings';
 import axios from 'axios';
 
 function App() {
@@ -78,10 +78,11 @@ function App() {
           
             <div className=' bg-white dark:bg-[#202124] transition-all duration-300'>
               <Header user={user} setUser={setUser} loggedIn={loggedIn} setLoggedIn={setLoggedIn} darkMode={darkMode} handleThemeSwitch={handleThemeSwitch}/>
-              <LandingPage darkMode={darkMode}/>
+              
                 {/* <WeatherIcon /> */}
                 <Routes>
-                  <Route path='/bookings' Component={Bookings}/>
+                  <Route path='/' element={<LandingPage darkMode={darkMode} user={user}/>}/>
+                  <Route path='/bookings' Component={Booking}/>
                 </Routes>
               
             </div>

@@ -41,10 +41,10 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
                         </>
                         :
                         <>
-                            <Link to="/login">
+                            
                                 <button className='box-border text-gray-500 dark:text-slate-200 h-[40px] my-auto font-semibold border-gray-600/30 dark:border-slate-200/30 border-[1px] rounded-lg px-3 bg-opacity-0 dark:bg-opacity-0 hover:bg-opacity-100 dark:hover:bg-opacity-100 hover:border-blue-500 dark:hover:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'
                                         onClick={() => setLoginPopup(!loginPopup)}>Login/Register</button>
-                            </Link>                            
+                                                        
                             {
                                 loginPopup &&
                                 <>
