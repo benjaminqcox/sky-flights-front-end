@@ -16,7 +16,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 
-function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, returnFlight, setReturnFlight, currency, setCurrency, adultValue, setAdultValue, childrenValue, setChildrenValue}) {
+function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, returnFlight, setReturnFlight, currency, setCurrency, adultValue, setAdultValue, childrenValue, setChildrenValue, cabin, setCabin}) {
     
     const [loading, setLoading] = useState(false);   
     const [moreFilters, setMoreFilters] = useState(false); 
@@ -29,7 +29,6 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
     // const [adultValue, setAdultValue] = useState(1);
     // const [childrenValue, setChildrenValue] = useState(0);
     const [infantsValue, setInfantsValue] = useState(0);
-    const [cabin, setCabin] = useState("M");
     const [stopovers, setStopovers] = useState('0');
     const [travelDays, setTravelDays] = useState();
 
@@ -95,7 +94,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
         try {
             if (!returnFlight) {
                 if (!moreFilters) {
-                    const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                    const URL = `http://localhost:8080/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
                     console.log(URL);
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
@@ -113,7 +112,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                     }
                     console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
                     console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
-                    const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                    const URL = `http://localhost:8080/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
                     await setFlights(response.data);
@@ -122,7 +121,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
             }
             else {
                 if (!moreFilters) {
-                    const URL = `http://localhost:8080/booking/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                    const URL = `http://localhost:8080/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
                     console.log(URL);
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
@@ -140,7 +139,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                     }
                     console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
                     console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
-                    const URL = `http://localhost:8080/booking/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                    const URL = `http://localhost:8080/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
                     await setFlights(response.data);
@@ -248,6 +247,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                         <DatePicker
                             label="Returning"
                             value={returnDate}
+                            required
                             minDate={departureDate.add(1, "days")}
                             onChange={(newValue) => setReturnDate(newValue)}
                         /> : <></>}
@@ -268,7 +268,12 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                 radius="lg"
                                 value={cabin}
                                 color='indigo'
-                                onChange={(e) => setCabin(e)}
+                                onChange={(e) => {
+                                    
+                                    setCabin(e)
+                                    console.log(cabin)
+                                    return;
+                                }}
                                 data={[
                                     { label: 'Economy', value: 'M' },
                                     { label: 'Premium Economy', value: 'W' },
@@ -342,8 +347,8 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
 
                         <div className='w-[33%] border-solid border-0 flex flex-col gap-3'>
                               
-                              <TextField inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" label="Min Price" variant="outlined" value={value2[0]} onChange={(e) => {handlePriceChangeInputFields(e, 1)}}/>
-                              <TextField inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" label="Max Price" variant="outlined" value={value2[1]} onChange={(e) => {handlePriceChangeInputFields(e, 2)}}/>
+                              <TextField inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" label={`Min Price (${currency.split(' ')[0]} ${currency.split(' ')[1]})`} variant="outlined" value={value2[0]} onChange={(e) => {handlePriceChangeInputFields(e, 1)}}/>
+                              <TextField inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} id="outlined-basic" label={`Max Price (${currency.split(' ')[0]} ${currency.split(' ')[1]})`} variant="outlined" value={value2[1]} onChange={(e) => {handlePriceChangeInputFields(e, 2)}}/>
                                 <Slider
                                     getAriaLabel={() => 'Minimum distance shift'}
                                     value={value2}
@@ -351,8 +356,6 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                     valueLabelDisplay="auto"
                                     max={8000}
                                     getAriaValueText={valuetext}
-
-                                    
                                     style={{width: '90%'}}
                                 />
                         </div>
@@ -360,7 +363,10 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
 
                 </>
                 : <></>}
-                <button type='submit' className='box-border text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>Submit</button>
+                {returnFlight && returnDate == null ?                 
+                <button type='submit' disabled className='box-border text-gray-400 bg-opacity-0 h-[40px] font-semibold border-[2px] border-gray-400 rounded-lg px-3 shadow-black transition-all duration-200 active:shadow-none active:border-red-600 active:text-red-600'>Submit</button>
+                : 
+                <button type='submit' className='box-border text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>Submit</button>}
             </form>
             {/* </MantineProvider> */}
         </>

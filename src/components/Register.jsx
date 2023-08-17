@@ -86,9 +86,6 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
             console.log(response.data);
             setLoggedIn(() => true);
             setUser(() => response.data);
-
-            // setListOfFlights(response.data)
-            // setLoading(false);
         } catch (error) {
             console.log(error);
         }

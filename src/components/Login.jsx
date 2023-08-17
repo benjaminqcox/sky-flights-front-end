@@ -6,7 +6,7 @@ import { PasswordInput, Stack, TextInput } from '@mantine/core';
 import { IconAt } from '@tabler/icons-react';
 import axios from "axios";
 
-function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLoggedIn, setUser}){
+function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLoggedIn, setUser, userID, setUserID}){
     const [username, setUsername] = useState('');
 
     const [password, setPassword] = useState("");
@@ -26,6 +26,17 @@ function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLogge
         } catch (error) {
             console.log(error);
         }
+
+        try {
+            const GETUSERID_URL = `http://localhost:8080/users/getUserID/${username}`;
+            const response2 = await axios.get(GETUSERID_URL, { withCredentials: true });
+            console.log("usernameID: ", response2.data);
+            setUserID(() => () => response2.data)
+            console.log(userID)
+        } catch (error) {
+            console.log(error);
+        }
+        
         setUsername("");
         setPassword("");
     }

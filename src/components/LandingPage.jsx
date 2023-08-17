@@ -5,7 +5,7 @@ import dummyFlightData from '../dummyFlightData.json'
 import axios from 'axios';
 import { Loader } from '@mantine/core';
 
-function LandingPage({darkMode}) {
+function LandingPage({darkMode, userID}) {
 
     const [listOfFlights, setListOfFlights] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -14,6 +14,7 @@ function LandingPage({darkMode}) {
     const [currency, setCurrency] = useState("🇬🇧 GBP Pound Sterling (£)");
     const [noOfAdults, setNoOfAdults] = useState(1);
     const [noOfChildren, setNoOfChildren] = useState(0);
+    const [cabin, setCabin] = useState("M");
 
     useEffect(() => {
         getFlights();
@@ -22,7 +23,7 @@ function LandingPage({darkMode}) {
     const getFlights = async () => {
         try {
             setLoading(true);
-            const URL = `http://localhost:8080/booking/flights/getFiltered/?flyTo=JFK&flyFrom=LHR&leaveDateFrom=30/08/2023&leaveDateTo=30/08/2023&numberOfAdults=7`;
+            const URL = `http://localhost:8080/flights/getFiltered/?flyTo=JFK&flyFrom=LHR&leaveDateFrom=30/08/2023&leaveDateTo=30/08/2023&numberOfAdults=7`;
             const response = await axios.get(URL, { withCredentials: true });
             setListOfFlights(response.data)
             setLoading(false);
@@ -40,7 +41,7 @@ function LandingPage({darkMode}) {
 
             {!error ? !loading ? listOfFlights.map((flight) => {
 
-            return <FlightListItem darkMode={darkMode} flightData={flight} returnFlight={returnFlight} currency={currency} setCurrency={setCurrency} adultValue={noOfAdults} childrenValue={noOfChildren} />
+            return <FlightListItem darkMode={darkMode} flightData={flight} returnFlight={returnFlight} currency={currency} setCurrency={setCurrency} adultValue={noOfAdults} childrenValue={noOfChildren} cabin={cabin} userID={userID}/>
             }) 
             
             : 

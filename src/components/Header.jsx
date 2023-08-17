@@ -12,7 +12,7 @@ import Login from './Login';
 import Account from './Account';
 import { motion, AnimatePresence } from "framer-motion";
 
-function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSwitch }) {
+function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSwitch, userID, setUserID }) {
     const [loginPopup, setLoginPopup] = useState(false);
     const [showLoginOrRegister, setShowLoginOrRegister] = useState(false);
     const [showAccount, setShowAccount] = useState(true);
@@ -21,7 +21,7 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
             <header className="flex flex-row border-b-[1px] border-gray-600/30 dark:border-slate-300/30 justify-between self-center w-full h-[80px] sticky top-0 backdrop-blur z-50">
                 <Link to="/"><img src={logo} className='w-[20vh] m-5 rounded-sm'></img></Link>
                 
-                <div className='flex my-auto m-5 gap-3'>
+                <div className='flex my-auto m-5 gap-3 dark:text-slate-200'>
                     {/* <Button variant='contained' className='h-[50%] top-2 right-2'>Login</Button> */}
                     <IconButton onClick={handleThemeSwitch}>
                         {darkMode === "dark" ? <DarkModeIcon className='dark:text-slate-200'></DarkModeIcon> : <LightModeIcon></LightModeIcon>}
@@ -59,7 +59,7 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
                                     {
                                         showLoginOrRegister ? 
                                         <>
-                                            <Login darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser}/>
+                                            <Login darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser} userID={userID} setUserID={setUserID}/>
                                         </>
                                         :
                                         <>

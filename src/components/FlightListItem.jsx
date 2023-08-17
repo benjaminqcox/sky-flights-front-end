@@ -7,6 +7,7 @@ import Favorite from '@mui/icons-material/Favorite';
 import Checkbox from '@mui/material/Checkbox';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import PlaceIcon from '@mui/icons-material/Place';
 import { useState } from 'react';
 import { dayCalendarSkeletonClasses } from '@mui/x-date-pickers';
 import { useEffect } from 'react';
@@ -16,11 +17,14 @@ import airportsJson from '../airports.json'
 import { Modal } from '@mui/material';
 import FlightMap from './FlightMap';
 import WeatherIcon from './WeatherIcon';
+import dayjs from 'dayjs';
 
-function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurrency, adultValue, childrenValue} ) {
+function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurrency, adultValue, childrenValue, cabin, userID, user} ) {
     const [moreInfo, setMoreInfo] = useState(false);
-    const [airlineNames, setAirlineNames] = useState([]);
+    const [airlineName, setAirlineName] = useState("");
+    const [airlineName2, setAirlineName2] = useState("")
     const [airlineLogo, setAirlineLogo] = useState("");
+    const [airlineLogo2, setAirlineLogo2] = useState("");
     const [countryImage, setCountryImage] = useState("");
     const [open, setOpen] = useState(false);
     const [coordinates, setCoordinates] = useState([]);
@@ -37,7 +41,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
 
     useEffect(() => {
         getAirlineInfo();
-        getCountryImage(airlineNames, UNSPLASH_ACCESS_KEY);
+        getCountryImage(airlineName, UNSPLASH_ACCESS_KEY);
         const airportFrom = airportsJson.find((airport) => airport.iata == flightData.flyFrom);
         const airportTo = airportsJson.find((airport) => airport.iata == flightData.flyTo);
         setCoordinates([[airportFrom.lat, airportFrom.lon], [airportTo.lat, airportTo.lon]])
@@ -46,16 +50,20 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
         // setSingleOrReturn(flightData.airline[0] ? false : true);
     }, [flightData]);
 
-    const getAirlineInfo = (aName) => {
+    const getAirlineInfo = () => {
         const airlineCode = airlineLogosJson.find((airline) => flightData.airline[0].toLowerCase() == airline.id.toLowerCase());
-        // const airCodes = flightData.airline.map((flightD) => {
-        //     const code = airlineLogosJson.find((airline) => flightD.toLowerCase() == airline.id.toLowerCase())
-        //     setAirlineNames([... airlineNames, code]);
-        // })
-        // console.log("airline names: ", airlineNames);
+        const airlineCode2 = airlineLogosJson.find((airline) => flightData.airline[1]?.toLowerCase() == airline.id.toLowerCase());
 
-        // setAirlineName(airlineCode.name);
+        setAirlineName(airlineCode.name);
         setAirlineLogo(airlineCode.logo);
+
+        if (flightData.airline[1]) {
+            setAirlineName2(airlineCode2.name);
+            setAirlineLogo2(airlineCode2.logo);
+        } else {
+            setAirlineName2(airlineCode.name);
+            setAirlineLogo2(airlineCode.logo);
+        }
     }
 
     const getCountryImage = async () => {
@@ -88,36 +96,46 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
 
     console.log(flightData)
 
-    // const latitudeFrom = airportFrom.lat;
-    // const longitudeFrom = airportFrom.lon;
-    // const latitudeTo = airportTo.lat;
-    // const longitudeTo = airportTo.lon;
+    const saveBooking = async () => {
+        try {
+            const response3 = await axios.get(`http://localhost:8080/users/user`, { withCredentials: true });
+
+            const GETUSERID_URL = `http://localhost:8080/users/getUserID/${response3.data}`;
+            const response2 = await axios.get(GETUSERID_URL, { withCredentials: true });
+            console.log("usernameID: ", response2.data);    
+
+            const URL = `http://localhost:8080/booking/create`;
+            const response = await axios.post(URL, {
+                flightID: 777,
+                flightFrom: flightData.flyFrom,
+                flightTo: flightData.flyTo,
+                cityFrom: flightData.cityFrom,
+                cityTo: flightData.cityTo,
+                adults: adultValue,
+                children: childrenValue,
+                cabinType: cabin, 
+                stopovers: stopovers,
+                dateFrom: dayjs(departureDate).format('DD-MM-YYYY'),
+                dateTo: dayjs(departureDateReturn).format('DD-MM-YYYY'),
+                returnOrNot: returnFlight,
+                price: Math.round((flightData.fare.adults*adultValue) + (flightData.fare.children*childrenValue)),
+                user: {
+                    userID: response2.data
+                }
+            } , { withCredentials: true });
+            console.log(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return ( 
         <>
             <div className={`text-gray-600 place-items-stretch dark:text-gray-300 shadow-lg justify-between border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] h-[80vh] sm:h-[20vw] min-h-[330px] transition-all duration-300 ease-out mt-5 flex flex-col sm:flex-row mx-auto   ${moreInfo ? `min-h-[500px]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll sm:overflow-hidden dark:bg-[#202124] animate-in slide-in-from-bottom fade-in ease-in-out`}>
                 <div className='p-0 group overflow-hidden relative text-left border-0 border-solid border-white sm:w-[37%]'>
-                    <div className='flex items-end justify-center p-3 absolute top-4 left-4 z-10 rounded-full bg-black/50'>
-                        {
-                            airlineNames.map((airline) => {
-                                return (
-                                    <p className='text-l font-semibold mb-1 text-slate-200'>
-                                        {airline}  
-                                    </p>
-                                )
-                            })
-                        }
-
-                        {/* <img 
-                            src={airlineLogo}
-                            style={{width: 30, height: 30, borderRadius: 8, marginLeft: 20}}
-                            alt="new"
-                        /> */}
-
-                        
+                    <div className='flex items-end justify-center p-1 top-2 left-2 absolute z-10 rounded-full text-white cursor-none] peer'>
+                        <PlaceIcon />
                     </div>
-
-                    {/* <div className='bg-gray-500 h-[85%] rounded-xl'> */}
                     <img    
                             src={countryImage}
                             className='z-0 group-hover:scale-110 rounded-tr-none rounded-br-none object-cover object-top h-[100%] w-full transition duration-150 ease-out cursor-pointer '
@@ -135,12 +153,20 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                 {
                     returnFlight ? 
                     <>
-                        <div className={`border-0 border-solid border-black sm:w-[37%] pt-12 ${moreInfo ? ' pl-28' : 'pl-5'} transition-all duration-300`}>
+                        
+                        <div className={`border-0 border-solid border-black sm:w-[37%] pt-12 ${moreInfo ? ' pl-28' : 'pl-5'} transition-all ease-in-out duration-300`}>
                             <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
-                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[350px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
+                                <p className={`text-start -mt-7 font-bold mb-1 flex transition-all duration-300 ease-in-out ${moreInfo ? ' -ml-20 mb-6' : ''} flex-row`}>{airlineName}
+                                <img 
+                                    src={airlineLogo}
+                                    style={{width: 20, height: 20, borderRadius: 8, marginLeft: 10, marginTop: 2}}
+                                    alt="new"
+                                />
+                                </p>
+                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[320px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
                                     <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
-                                        <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 7200) + ' hours'}</Text>
+                                        <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 7200) + ' hours'}, Direct</Text>
                                     </Timeline.Item>
 
                                     {/* <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG"  lineVariant="dashed">
@@ -159,11 +185,17 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                         </div>
 
                         <div className={`border-0 border-solid border-black sm:w-[37%] pt-12 ${moreInfo ? ' pl-28' : 'pl-5'} transition-all duration-300`}>
+
                             <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
-                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[350px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
-                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.routes[1].cityFrom}, ${flightData.routes[1].flyFrom}`}>
+                                <p className={`text-start -mt-7 font-bold mb-1 flex transition-all duration-300 ease-in-out ${moreInfo ? ' -ml-20 mb-6' : ''} flex-row`}>{airlineName2}<img 
+                                    src={airlineLogo2}
+                                    style={{width: 20, height: 20, borderRadius: 8, marginLeft: 10, marginTop: 2}}
+                                    alt="new"
+                                /></p>
+                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[320px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDateReturn} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.routes[1].cityFrom}, ${flightData.routes[1].flyFrom}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{departureTimeReturn.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDateReturn}</Text></Text>
-                                        <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 7200) + ' hours'}</Text>
+                                        <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 7200) + ' hours'}, Direct</Text>
                                     </Timeline.Item>
 
                                     {/* <Timeline.Item bulletSize={12} in bullet={<IconGitCommit size={12}/>} title="Paris Charles de Gaule CDG"  lineVariant="dashed">
@@ -174,7 +206,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                                         <Text size="xs" mt={4}>4 hours left</Text>
                                     </Timeline.Item> */}
 
-                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.routes[1].cityTo}, ${flightData.routes[1].flyTo}`}>
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDateReturn} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.routes[1].cityTo}, ${flightData.routes[1].flyTo}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{arrivalTimeReturn.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDateReturn}</Text></Text>
                                     </Timeline.Item>
                                 </Timeline>
@@ -183,9 +215,18 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                     </>
                     :
                     <>
-                        <div className={`border-0 border-solid border-black sm:w-[37%] pt-12 ${moreInfo ? ' pl-32' : 'pl-5'} transition-all duration-300`}>
+                        
+                        <div className={`border-0 border-solid border-black sm:w-[37%] relative pt-12 ${moreInfo ? ' pl-32' : 'pl-5'} transition-all duration-300`}>
+                            
                             <MantineProvider theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
-                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[350px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
+                                <p className={`text-start -mt-7 font-bold mb-1 flex transition-all ease-in-out duration-300 ${moreInfo ? ' -ml-20 mb-6' : ''} flex-row`}>{airlineName}
+                                <img 
+                                    src={airlineLogo}
+                                    style={{width: 20, height: 20, borderRadius: 8, marginLeft: 10, marginTop: 2}}
+                                    alt="new"
+                                />
+                                </p>
+                                <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[320px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
                                     <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
                                         <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 3600) + ' hours'}</Text>
@@ -215,7 +256,9 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                         '&.Mui-checked': {
                         color: 'red',
                         },
-                    }}/>
+                    }}
+                        onClick={saveBooking}
+                    />
                     </div>
                     <p className='border-0 border-solid font-bold border-black text-2xl'>
                       {currencySymbol}{((flightData.fare.adults*adultValue) + (flightData.fare.children*childrenValue)).toFixed(2)} 
