@@ -37,7 +37,7 @@ function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLogge
             console.log(error);
         }
         
-        setUsername("");
+        //setUsername("");
         setPassword("");
     }
 

@@ -21,6 +21,7 @@ import FlightListItem from './components/FlightListItem';
 import dummyFlightData from './dummyFlightData.json'
 import FlightMap from './components/FlightMap';
 import WeatherIcon from './components/WeatherIcon';
+import Bookings from './components/Bookings';
 import axios from 'axios';
 
 function App() {
@@ -80,7 +81,7 @@ function App() {
               <LandingPage darkMode={darkMode}/>
                 {/* <WeatherIcon /> */}
                 <Routes>
-                  <Route path='/map' Component={FlightMap}/>
+                  <Route path='/bookings' Component={Bookings}/>
                 </Routes>
               
             </div>

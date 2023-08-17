@@ -37,7 +37,7 @@ function LandingPage({darkMode, userID}) {
     return ( 
         <div className='w-[100vw] h-[100%] min-h-screen gap-10 mt-20 pb-80 flex-col flex justify-start p-0'>
             <SearchForm darkMode={darkMode} setFlights={setListOfFlights} setFlightListLoading={setLoading} setError={setError} returnFlight={returnFlight} setReturnFlight={setReturnFlight}
-                currency={currency} setCurrency={setCurrency} adultValue={noOfAdults} setAdultValue={setNoOfAdults} childrenValue={noOfChildren} setChildrenValue={setNoOfChildren}/>
+                currency={currency} setCurrency={setCurrency} adultValue={noOfAdults} setAdultValue={setNoOfAdults} childrenValue={noOfChildren} setChildrenValue={setNoOfChildren} setCabin={setCabin} cabin={cabin}/>
 
             {!error ? !loading ? listOfFlights.map((flight) => {
 
