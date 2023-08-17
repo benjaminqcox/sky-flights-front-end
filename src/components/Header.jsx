@@ -26,50 +26,34 @@ function Header ({ user, setUser, loggedIn, setLoggedIn, darkMode, handleThemeSw
                     <IconButton onClick={handleThemeSwitch}>
                         {darkMode === "dark" ? <DarkModeIcon className='dark:text-slate-200'></DarkModeIcon> : <LightModeIcon></LightModeIcon>}
                     </IconButton>
-                    {loggedIn === true ? 
+                    {loggedIn ? 
                         <>
-                        <Link> Hello, {user}
-                            <IconButton>
-                                <p className='text-blue-500 m-auto p-0'>
-                                   <AccountCircleIcon fontSize='large' className='rounded-lg' onClick={() => setShowAccount(!showAccount)}/>
-                                </p>
-                            </IconButton>
-                        </Link>
-                        {
-                            showAccount ? 
-                            <>
-                                <Account user={user} darkMode={darkMode}/>
-                            </>
-                            :
-                            <>
-                            </>
-                        }
+                            <Link> Hello, {user}
+                                <IconButton>
+                                    <p className='text-blue-500 m-auto p-0'>
+                                    <AccountCircleIcon fontSize='large' className='rounded-lg' onClick={() => setShowAccount(!showAccount)}/>
+                                    </p>
+                                </IconButton>
+                            </Link>
+                            {
+                                showAccount && <Account setLoggedIn={setLoggedIn} user={user} darkMode={darkMode}/>
+                            }
                         </>
-                        : 
+                        :
                         <>
                             <Link to="/login">
                                 <button className='box-border text-gray-500 dark:text-slate-200 h-[40px] my-auto font-semibold border-gray-600/30 dark:border-slate-200/30 border-[1px] rounded-lg px-3 bg-opacity-0 dark:bg-opacity-0 hover:bg-opacity-100 dark:hover:bg-opacity-100 hover:border-blue-500 dark:hover:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'
                                         onClick={() => setLoginPopup(!loginPopup)}>Login/Register</button>
-                            </Link>
-
-                            
+                            </Link>                            
                             {
-                                loginPopup ?
+                                loginPopup &&
                                 <>
                                     {
                                         showLoginOrRegister ? 
-                                        <>
-                                            <Login darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser} userID={userID} setUserID={setUserID}/>
-                                        </>
+                                        <Login darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser} userID={userID} setUserID={setUserID}/>
                                         :
-                                        <>
-                                            
-                                                <Register key={1} darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser}/>
-                                        </>
+                                        <Register key={1} darkMode={darkMode} showLoginOrRegister={showLoginOrRegister} setShowLoginOrRegister={setShowLoginOrRegister} setLoggedIn={setLoggedIn} setUser={setUser}/>
                                     }
-                                </>
-                                :
-                                <>
                                 </>
                             }
 
