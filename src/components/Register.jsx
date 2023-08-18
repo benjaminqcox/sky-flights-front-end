@@ -52,6 +52,8 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
     const [visible, { toggle }] = useDisclosure(false);
     const [passwordError, setPasswordError] = useState(false);
 
+    const [registerError, setRegisterError] = useState(false);
+
     const [popoverOpened, setPopoverOpened] = useState(false);
     const checks = requirements.map((requirement, index) => (
         <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(password)} />
@@ -67,6 +69,7 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setRegisterError(false);
 
         if (password !== confirmPassword) {
             setPasswordError(true);
@@ -75,7 +78,7 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
 
         try {
             // setLoading(true);
-            const URL = `http://localhost:8080/users/register`;
+            const URL = `http://3.9.218.228:8081/users/register`;
             const response = await axios.post(URL, {
                 firstName: firstName,
                 lastName: lastName,
@@ -84,11 +87,28 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
                 password: password
             });
             console.log(response.data);
-            setLoggedIn(() => true);
+
+            // setLoggedIn(() => true);
             setUser(() => response.data);
         } catch (error) {
             console.log(error);
+            setRegisterError(true);
         }
+
+        const loginForm = new FormData();
+        loginForm.append("username", username);
+        loginForm.append("password", password)
+        try {
+            const URL = `http://3.9.218.228:8081/login`;
+            const response = await axios.post(URL, loginForm, { withCredentials: true });
+            console.log("Login response data: ", response.data);
+            setLoggedIn(() => true);
+            // handleSetUser(response.data);
+        } catch (error) {
+            console.log(error);
+            
+        }
+
     }
 
 
@@ -220,7 +240,8 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
                 </Stack>
 
                 <input type='submit' value="Register" className='mx-auto box-border text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px] cursor-pointer'/>
-                <p className="sm:text-sg font-['Roboto'] font-light" onClick={() => setShowLoginOrRegister(!showLoginOrRegister)}>Already have an account? <u className="text-blue-600 cursor-pointer">Log in</u></p>
+                {registerError ? <p className="text-red-500">An account wit this email address already exists. Please <u  onClick={() => setShowLoginOrRegister(!showLoginOrRegister)} className="text-blue-600 cursor-pointer">Log in</u></p> 
+                : <p className="sm:text-sg font-['Roboto'] font-light" onClick={() => setShowLoginOrRegister(!showLoginOrRegister)}>Already have an account? <u className="text-blue-600 cursor-pointer">Log in</u></p>}
             </form>
         </MantineProvider>
 

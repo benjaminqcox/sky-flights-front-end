@@ -11,24 +11,31 @@ function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLogge
 
     const [password, setPassword] = useState("");
     const [visible, { toggle }] = useDisclosure(false);
-    
+    const [loginError, setLoginError] = useState(false);
+
+    // const handleSetUser = (user) => {
+    //     setUser(() => user);
+    // }
+
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoginError(true);
         const loginForm = new FormData();
         loginForm.append("username", username);
         loginForm.append("password", password)
         try {
-            const URL = `http://localhost:8080/login`;
+            const URL = `http://3.9.218.228:8081/login`;
             const response = await axios.post(URL, loginForm, { withCredentials: true });
             console.log("Login response data: ", response.data);
             setLoggedIn(() => true);
-            setUser(() => response.data);
+            // handleSetUser(response.data);
         } catch (error) {
             console.log(error);
+            setLoginError(true);
         }
 
         try {
-            const GETUSERID_URL = `http://localhost:8080/users/getUserID/${username}`;
+            const GETUSERID_URL = `http://3.9.218.228:8081/users/getUserID/${username}`;
             const response2 = await axios.get(GETUSERID_URL, { withCredentials: true });
             console.log("usernameID: ", response2.data);
             setUserID(() => () => response2.data)
@@ -78,6 +85,7 @@ function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLogge
 
                 <input type='submit' value="Login" className='mx-auto box-border w-[80%] text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'/>
                 <p className="sm:text-sg font-['Roboto'] font-light" onClick={() => setShowLoginOrRegister(!showLoginOrRegister)}>No account? <u>Register here</u></p>
+                {loginError && <p className="text-red-500">Login failed: username/password invalid.</p>}
             </form>
         </MantineProvider>
     )

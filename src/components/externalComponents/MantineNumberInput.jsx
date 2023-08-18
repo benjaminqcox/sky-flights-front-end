@@ -38,6 +38,9 @@ function MantineNumberInput({ value, setValue, adult, oppValue }) {
             step={1}
             styles={{ input: { width: rem(54), textAlign: 'center', fontSize: '1rem' } }}
             className='transition-all duration-300 text-sm'
+            classNames={
+              {input: 'dark:bg-[#202124]'}
+            }
         />
 
         <ActionIcon className={`dark:border-slate-300/30 text-slate-300 transition-all duration-300 ${value == max ? 'bg-slate-100/20 scale-0 active:translate-y-0 hover:bg-slate-100/20 duration-300' : ''}`} size={42} variant="default" onClick={() => handlers.current.increment()}>

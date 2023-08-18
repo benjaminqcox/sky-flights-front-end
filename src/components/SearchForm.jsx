@@ -1,8 +1,8 @@
-import { TextInput, Loader, MantineProvider } from '@mantine/core';
+import { TextInput, Loader, MantineProvider, Collapse } from '@mantine/core';
 import { useEffect, useState, forwardRef } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { DateRange, Today } from '@mui/icons-material';
-import { Button, Switch, TextField } from '@mui/material';
+import { Button, Switch, TextField, Tooltip } from '@mui/material';
 import MantineNumberInput from './externalComponents/MantineNumberInput';
 import { SegmentedControl } from '@mantine/core';
 import MultipleSelectCheckmarks from './externalComponents/MultipleSelectCheckmarks';
@@ -14,6 +14,7 @@ import airports from '../airports.json';
 import { Group, Text, MantineColor, SelectItemProps, Autocomplete } from '@mantine/core';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 
 function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, returnFlight, setReturnFlight, currency, setCurrency, adultValue, setAdultValue, childrenValue, setChildrenValue, cabin, setCabin}) {
@@ -94,7 +95,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
         try {
             if (!returnFlight) {
                 if (!moreFilters) {
-                    const URL = `http://localhost:8080/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                    const URL = `http://3.9.218.228:8081/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
                     console.log(URL);
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
@@ -112,7 +113,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                     }
                     console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
                     console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
-                    const URL = `http://localhost:8080/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                    const URL = `http://3.9.218.228:8081/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
                     await setFlights(response.data);
@@ -121,7 +122,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
             }
             else {
                 if (!moreFilters) {
-                    const URL = `http://localhost:8080/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                    const URL = `http://3.9.218.228:8081/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
                     console.log(URL);
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
@@ -139,7 +140,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                     }
                     console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
                     console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
-                    const URL = `http://localhost:8080/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                    const URL = `http://3.9.218.228:8081/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
                     await setFlights(response.data);
@@ -191,7 +192,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                 size='lg'
                                 classNames={{ 
                                     item: 'text-sm whitespace-prewrap break-normal', 
-                                    input:'transition-all duration-200',
+                                    input:'transition-all duration-300 h-[56px]  dark:bg-[#202124]',
                                     dropdown: 'overflow-y-scroll max-h-[450px]'
                                 }}
                                 className='mx-auto w-[50%] sm:w-auto'
@@ -214,7 +215,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                 size='lg'
                                 classNames={{ 
                                     item: 'text-sm whitespace-prewrap break-normal',
-                                    input:'transition-all duration-200',
+                                    input:'transition-all duration-300  h-[56px] dark:bg-[#202124]',
                                     dropdown: 'overflow-y-scroll max-h-[450px]'
                                 }}
                                 className='mx-auto w-[50%] sm:w-auto'
@@ -258,9 +259,9 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                         <TextField/>
                     </div> */}
                 </div>
-                {moreFilters ? 
-                <>
-                    <div className='content-center self-center w-[80%] h-min mx-auto gap-2 flex flex-col gap-2'>
+                <Collapse in={moreFilters} transitionDuration={300}>
+                
+                    <div className='content-center self-center w-[80%] h-min mx-auto flex flex-col gap-2'>
                         <MantineProvider  theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
                         <SegmentedControl 
                                 transitionDuration={300}
@@ -282,19 +283,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                 ]}
                                 className='h-min rounded-full transition-all duration-200'
                         />
-                        <SegmentedControl 
-                                transitionDuration={300}
-                                transitionTimingFunction="linear"
-                                radius="lg"
-                                value={stopovers}
-                                color='indigo'
-                                onChange={(e) => setStopovers(e)}
-                                data={[
-                                    { label: 'No stopovers', value: '0' },
-                                    { label: 'Single stopover', value: '1' }
-                                ]}
-                                className='h-min rounded-full transition-all duration-200'
-                        />
+                        
                         <SegmentedControl 
                                     transitionDuration={300}
                                     transitionTimingFunction="linear"
@@ -316,7 +305,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                     </div>
 
                     {/* border-solid border-white border-[5px] Add this to the classname so we can see the DIV tag properly! */}
-                    <div className='sm:flex self-center w-[80%] h-min mx-auto gap-2'>
+                    <div className='sm:flex self-center w-[100%] h-min mx-auto gap-2 mt-7'>
                         <div className='border-solid border-0 w-[33%]'>
                             <MantineProvider  theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
 
@@ -361,10 +350,12 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                         </div>
                     </div>
 
-                </>
-                : <></>}
-                {returnFlight && returnDate == null ?                 
-                <button type='submit' disabled className='box-border text-gray-400 bg-opacity-0 h-[40px] font-semibold border-[2px] border-gray-400 rounded-lg px-3 shadow-black transition-all duration-200 active:shadow-none active:border-red-600 active:text-red-600'>Submit</button>
+                
+                </Collapse>
+                {returnFlight && returnDate == null ?
+                <Tooltip title='Please provide a return date/select one-way flights' followCursor>
+                    <p onClick={() => enqueueSnackbar('Please select a return date')} className='box-border my-auto text-gray-400 bg-opacity-0 h-[40px] font-semibold border-[2px] border-gray-400 rounded-lg px-3 shadow-black transition-all duration-200 active:shadow-none active:border-red-600 active:text-red-600 pt-[6px]'>Submit</p>
+                </Tooltip>                 
                 : 
                 <button type='submit' className='box-border text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>Submit</button>}
             </form>
