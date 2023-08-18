@@ -95,7 +95,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
         try {
             if (!returnFlight) {
                 if (!moreFilters) {
-                    const URL = `http://localhost:8080/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                    const URL = `http://3.9.218.228:8081/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
                     console.log(URL);
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
@@ -113,7 +113,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                     }
                     console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
                     console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
-                    const URL = `http://localhost:8080/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                    const URL = `http://3.9.218.228:8081/flights/getFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.subtract(4, "days").toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
                     await setFlights(response.data);
@@ -122,7 +122,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
             }
             else {
                 if (!moreFilters) {
-                    const URL = `http://localhost:8080/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
+                    const URL = `http://3.9.218.228:8081/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}`
                     console.log(URL);
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
@@ -140,7 +140,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                     }
                     console.log(departureDate.subtract(4, "days").toDate().toLocaleDateString());
                     console.log(departureDate.add(4, "days").toDate().toLocaleDateString())
-                    const URL = `http://localhost:8080/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
+                    const URL = `http://3.9.218.228:8081/flights/getReturnFiltered/?flyTo=${toLocation.substring(0,3)}&flyFrom=${fromLocation.substring(0,3)}&leaveDateFrom=${departureDate.toDate().toLocaleDateString()}&leaveDateTo=${departureDate.add(4, "days").toDate().toLocaleDateString()}&returnDateFrom=${returnDate.toDate().toLocaleDateString()}&returnDateTo=${returnDate.add(4, "days").toDate().toLocaleDateString()}&numberOfAdults=${adultValue}&numberOfChildren=${childrenValue}&stopovers=${stopovers}&priceFrom=${value2[0]}&priceTo=${value2[1]}&cabin=${cabin}&weekdaysOnly=${isWeekdaysOnly}&weekendsOnly=${isWeekendsOnly}&currency=${currency.split(' ')[1]}`
                     const response = await axios.get(URL, { withCredentials: true })
                     console.log(response);
                     await setFlights(response.data);

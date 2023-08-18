@@ -32,7 +32,7 @@ function App() {
 
   const checkUser = async () => {
     try {
-      const URL = `http://localhost:8080/users/user`;
+      const URL = `http://3.9.218.228:8081/users/user`;
       const response = await axios.get(URL, { withCredentials: true });
       setLoggedIn(() => true);
       setUser(() => response.data);
@@ -81,7 +81,7 @@ function App() {
               
                 {/* <WeatherIcon /> */}
                 <Routes>
-                  <Route path='/' element={<LandingPage darkMode={darkMode} user={user}/>}/>
+                  <Route path='/' element={<LandingPage darkMode={darkMode} user={user} loggedIn={loggedIn}/>}/>
                   <Route path='/bookings' Component={Booking}/>
                 </Routes>
               

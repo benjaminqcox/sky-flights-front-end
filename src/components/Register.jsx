@@ -78,7 +78,7 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
 
         try {
             // setLoading(true);
-            const URL = `http://localhost:8080/users/register`;
+            const URL = `http://3.9.218.228:8081/users/register`;
             const response = await axios.post(URL, {
                 firstName: firstName,
                 lastName: lastName,
@@ -99,7 +99,7 @@ function Register ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLo
         loginForm.append("username", username);
         loginForm.append("password", password)
         try {
-            const URL = `http://localhost:8080/login`;
+            const URL = `http://3.9.218.228:8081/login`;
             const response = await axios.post(URL, loginForm, { withCredentials: true });
             console.log("Login response data: ", response.data);
             setLoggedIn(() => true);

@@ -12,21 +12,21 @@ const Booking = () => {
     const [toDelete, setToDelete] = useState();
 
     const getUserName = async () => {
-        const URL = `http://localhost:8080/users/user/`;
+        const URL = `http://3.9.218.228:8081/users/user/`;
         const response = await axios.get(URL, { withCredentials: true });
         return response.data;
     }
 
     const getUserID = async () => {
         const user = await getUserName();
-        const URL = `http://localhost:8080/users/getUserID/` + user;
+        const URL = `http://3.9.218.228:8081/users/getUserID/` + user;
         const response = await axios.get(URL, { withCredentials: true });
         return response.data.data;
     }
 
     const getBookings = async () => {
         const userName = await getUserName();
-        const URL = `http://localhost:8080/users/getByUsername/` + userName;
+        const URL = `http://3.9.218.228:8081/users/getByUsername/` + userName;
         const response = await axios.get(URL, { withCredentials: true });
         setBookings(response.data.bookings);
     }
@@ -39,7 +39,7 @@ const Booking = () => {
     const cancelBooking = async (bookingID) => {
         setToDelete(bookingID);
         try {
-            const URL = `http://localhost:8080/booking/deleteBookingById/${bookingID}`
+            const URL = `http://3.9.218.228:8081/booking/deleteBookingById/${bookingID}`
             const response = await axios.delete(URL, { withCredentials: true });
             enqueueSnackbar('Booking cancelled', {variant: 'default',
             anchorOrigin: {
