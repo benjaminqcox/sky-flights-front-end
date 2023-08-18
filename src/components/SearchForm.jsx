@@ -1,4 +1,4 @@
-import { TextInput, Loader, MantineProvider } from '@mantine/core';
+import { TextInput, Loader, MantineProvider, Collapse } from '@mantine/core';
 import { useEffect, useState, forwardRef } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { DateRange, Today } from '@mui/icons-material';
@@ -14,6 +14,7 @@ import airports from '../airports.json';
 import { Group, Text, MantineColor, SelectItemProps, Autocomplete } from '@mantine/core';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 
 function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, returnFlight, setReturnFlight, currency, setCurrency, adultValue, setAdultValue, childrenValue, setChildrenValue, cabin, setCabin}) {
@@ -258,9 +259,9 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                         <TextField/>
                     </div> */}
                 </div>
-                {moreFilters ? 
-                <>
-                    <div className='content-center self-center w-[80%] h-min mx-auto gap-2 flex flex-col gap-2'>
+                <Collapse in={moreFilters} transitionDuration={300}>
+                
+                    <div className='content-center self-center w-[80%] h-min mx-auto flex flex-col gap-2'>
                         <MantineProvider  theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
                         <SegmentedControl 
                                 transitionDuration={300}
@@ -316,7 +317,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                     </div>
 
                     {/* border-solid border-white border-[5px] Add this to the classname so we can see the DIV tag properly! */}
-                    <div className='sm:flex self-center w-[80%] h-min mx-auto gap-2'>
+                    <div className='sm:flex self-center w-[100%] h-min mx-auto gap-2 mt-7'>
                         <div className='border-solid border-0 w-[33%]'>
                             <MantineProvider  theme={{ colorScheme: `${darkMode === "dark" ? 'dark' : 'light'}` }}>
 
@@ -361,10 +362,10 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                         </div>
                     </div>
 
-                </>
-                : <></>}
+                
+                </Collapse>
                 {returnFlight && returnDate == null ?                 
-                <button type='submit' disabled className='box-border text-gray-400 bg-opacity-0 h-[40px] font-semibold border-[2px] border-gray-400 rounded-lg px-3 shadow-black transition-all duration-200 active:shadow-none active:border-red-600 active:text-red-600'>Submit</button>
+                <button disabled onClick={() => enqueueSnackbar('Please select a return date')} className='box-border text-gray-400 bg-opacity-0 h-[40px] font-semibold border-[2px] border-gray-400 rounded-lg px-3 shadow-black transition-all duration-200 active:shadow-none active:border-red-600 active:text-red-600'>Submit</button>
                 : 
                 <button type='submit' className='box-border text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>Submit</button>}
             </form>

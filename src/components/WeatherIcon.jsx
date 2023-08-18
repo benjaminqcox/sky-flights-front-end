@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Loader } from "@mantine/core";
 
 const TOKEN = '9c52a8a268a94a068e0111218231508'
 
@@ -53,13 +54,13 @@ const WeatherIcon = ({date, latitude, longitude}) => { //needs params of latitud
         <>
             
             {
-                weatherInfo && 
+                weatherInfo ? 
                 // <div style={{marginLeft: "auto", marginRight: "auto"}}>
                     // <p style={{textAlign: 'left', color: 'white'}}>{`Location (longitude, latitude): ${longitude}, ${latitude}`}</p>
                     // <p style={{textAlign: 'left', color: 'white'}}>{`Date: ${weatherInfo.date}`}</p>
                     // <p style={{textAlign: 'left', color: 'white'}}>{`Description: ${weatherInfo.day.condition.text}`}</p>
                     // <p style={{textAlign: 'left', color: 'white'}}>{`Average temp: ${weatherInfo.day.avgtemp_c}°C`}</p>
-                    <p className=" transition-all  flex rounded-xl bg-black/60 px-3 -translate-x-12 items-center text-bold">{weatherInfo.day.avgtemp_c}°C<img src={weatherInfo.day.condition.icon} /></p>
+                    <p className=" animate-popInWeather transition-all  flex rounded-xl bg-black/60 px-3 -translate-x-12 items-center text-bold">{weatherInfo.day.avgtemp_c}°C<img src={weatherInfo.day.condition.icon} className={`${weatherInfo.day.condition.text === "Sunny" ? 'scale-[1.6]' : 'scale-[1.2]'}`} /></p> : <p><Loader/></p>
                 // </div>
                 
             }

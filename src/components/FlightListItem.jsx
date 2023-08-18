@@ -1,6 +1,7 @@
 import React from 'react';
 import { Timeline, Text, MantineProvider } from '@mantine/core';
 import { IconGitBranch, IconGitPullRequest, IconGitCommit, IconMessageDots } from '@tabler/icons-react';
+import { MdFlightLand, MdFlightTakeoff, MdOutlineFlightLand } from 'react-icons/md'
 import FavouriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
@@ -18,6 +19,7 @@ import { Modal } from '@mui/material';
 import FlightMap from './FlightMap';
 import WeatherIcon from './WeatherIcon';
 import dayjs from 'dayjs';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurrency, adultValue, childrenValue, cabin, userID, user} ) {
     const [moreInfo, setMoreInfo] = useState(false);
@@ -48,6 +50,9 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
         setMoreInfo(false);
         getCurrencySymbol();
         // setSingleOrReturn(flightData.airline[0] ? false : true);
+
+        
+
     }, [flightData]);
 
     const getAirlineInfo = () => {
@@ -123,14 +128,28 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                     userID: response2.data
                 }
             } , { withCredentials: true });
-            console.log(response.data);
+            // console.log(response.data);
+
+            enqueueSnackbar('Booking saved!', {variant: 'success',
+                anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right'
+                }}
+            )
         } catch (error) {
             console.log(error);
+            enqueueSnackbar('Unable to save booking, please try again later', {variant: 'error',
+            anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'right'
+            }})
+
+
         }
     }
 
     return ( 
-        <>
+        <SnackbarProvider>
             <div className={`text-gray-600 place-items-stretch dark:text-gray-300 shadow-lg justify-between border-slate-300/30 dark:border-slate-100/10 rounded-3xl border-[1px] w-[1000px] max-w-[90%] h-[80vh] sm:h-[20vw] min-h-[330px] transition-all duration-300 ease-out mt-5 flex flex-col sm:flex-row mx-auto   ${moreInfo ? `min-h-[500px]` : `min-h-[25%]`} min-h-[230px] mx-auto transition-all duration-300 ease-out mt-28 sm:mt-0 overflow-scroll sm:overflow-hidden dark:bg-[#202124] animate-in slide-in-from-bottom fade-in ease-in-out`}>
                 <div className='p-0 group overflow-hidden relative text-left border-0 border-solid border-white sm:w-[37%]'>
                     <div className='flex items-end justify-center p-1 top-2 left-2 absolute z-10 rounded-full text-white cursor-none] peer'>
@@ -164,7 +183,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                                 />
                                 </p>
                                 <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[320px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
-                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <MdFlightTakeoff size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
                                         <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 7200) + ' hours'}, Direct</Text>
                                     </Timeline.Item>
@@ -177,7 +196,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                                         <Text size="xs" mt={4}>4 hours left</Text>
                                     </Timeline.Item> */}
 
-                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <MdFlightLand size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{arrivalTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDate}</Text></Text>
                                     </Timeline.Item>
                                 </Timeline>
@@ -193,7 +212,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                                     alt="new"
                                 /></p>
                                 <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[320px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
-                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDateReturn} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.routes[1].cityFrom}, ${flightData.routes[1].flyFrom}`}>
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDateReturn} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <MdFlightTakeoff size={12} />} title={`${flightData.routes[1].cityFrom}, ${flightData.routes[1].flyFrom}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{departureTimeReturn.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDateReturn}</Text></Text>
                                         <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 7200) + ' hours'}, Direct</Text>
                                     </Timeline.Item>
@@ -206,7 +225,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                                         <Text size="xs" mt={4}>4 hours left</Text>
                                     </Timeline.Item> */}
 
-                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDateReturn} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.routes[1].cityTo}, ${flightData.routes[1].flyTo}`}>
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDateReturn} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <MdFlightLand size={12} />} title={`${flightData.routes[1].cityTo}, ${flightData.routes[1].flyTo}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{arrivalTimeReturn.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDateReturn}</Text></Text>
                                     </Timeline.Item>
                                 </Timeline>
@@ -227,7 +246,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                                 />
                                 </p>
                                 <Timeline active={4} bulletSize={24} lineWidth={2} classNames={{ itemBody: `${moreInfo ? 'h-[320px] transition-all duration-300 ease-out' : 'h-[200px] transition-all duration-300 ease-out'}` }} >
-                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={departureDate} latitude={coordinates[0][0]} longitude={coordinates[0][1]}/> : <MdFlightTakeoff size={12} />} title={`${flightData.cityFrom}, ${flightData.flyFrom}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{departureTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {departureDate}</Text></Text>
                                         <Text weight={400} size="md" mt={75}>{Math.round(flightData.duration / 3600) + ' hours'}</Text>
                                     </Timeline.Item>
@@ -240,7 +259,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                                         <Text size="xs" mt={4}>4 hours left</Text>
                                     </Timeline.Item> */}
 
-                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <IconGitBranch size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
+                                    <Timeline.Item bullet={moreInfo ? <WeatherIcon date={arrivalDate} latitude={coordinates[1][0]} longitude={coordinates[1][1]}/> : <MdFlightLand size={12} />} title={`${flightData.cityTo}, ${flightData.flyTo}`}>
                                         <Text color="dimmed" size="sm" className='font-bold'>{arrivalTime.substring(0, 5)}<Text variant="link" component="span" inherit className='font-light'> - {arrivalDate}</Text></Text>
                                     </Timeline.Item>
                                 </Timeline>
@@ -267,7 +286,10 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                     {flightData.availability.seats ? <p className='border-0 border-solid border-black'>{flightData.availability.seats} Tickets remaining</p> : <p className='border-0 border-solid border-black'></p>}
 
                     <button className={`p-2 mt-2 rounded-2xl text-xl border-solid border-slate-300 flex gap-2 border-[1px] hover:bg-slate-200/30 transition-all duration-200 active:bg-slate-500/30 hover:cursor-pointer`}
-                        onClick={() =>{}}>
+                        onClick={() => enqueueSnackbar('Booking payment functionality coming soon!', {variant: 'info', anchorOrigin: {
+                            vertical: 'bottom',
+                            horizontal: 'right'
+                        }})}>
                         Select
                     </button>
 
@@ -288,7 +310,7 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
                     </button>
                 </div>
             </div>
-        </>
+        </SnackbarProvider>
      );
 }
 
