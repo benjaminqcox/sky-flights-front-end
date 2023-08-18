@@ -31,7 +31,7 @@ export default function MultipleSelectCheckmarks({currency, setCurrency}) {
   };
 
   return (
-    <div>
+    <div className='w-[230px]'>
       <FormControl sx={{ m: 1, width: '90%' }}>
         <InputLabel id="demo-multiple-checkbox-label">Select currency</InputLabel>
 

@@ -21,7 +21,7 @@ import WeatherIcon from './WeatherIcon';
 import dayjs from 'dayjs';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
-function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurrency, adultValue, childrenValue, cabin, userID, user} ) {
+function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurrency, adultValue, childrenValue, cabin, userID, user, loggedIn} ) {
     const [moreInfo, setMoreInfo] = useState(false);
     const [airlineName, setAirlineName] = useState("");
     const [airlineName2, setAirlineName2] = useState("")
@@ -138,7 +138,13 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
             )
         } catch (error) {
             console.log(error);
-            enqueueSnackbar('Unable to save booking, please try again later', {variant: 'error',
+            let message;
+            if (loggedIn) {
+                message = 'Unable to save booking, please try again later'
+            } else {
+                message = 'Please log in to save booking'
+            }
+            enqueueSnackbar(message, {variant: 'error',
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'right'

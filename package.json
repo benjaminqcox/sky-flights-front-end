@@ -28,6 +28,7 @@
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
     "react-social-icons": "^5.15.0",
+    "react-test-renderer": "^18.2.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -57,5 +58,17 @@
   "devDependencies": {
     "tailwindcss": "^3.3.3",
     "tailwindcss-animate": "^1.0.6"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+    "./src_root_for_test_file.ts"
+    ]
+  },
+  "transform": {
+      "^.+\\.(t|j)sx?$": "ts-jest"
   }
+  
+    
 }

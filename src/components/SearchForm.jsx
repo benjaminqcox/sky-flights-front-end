@@ -2,7 +2,7 @@ import { TextInput, Loader, MantineProvider, Collapse } from '@mantine/core';
 import { useEffect, useState, forwardRef } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { DateRange, Today } from '@mui/icons-material';
-import { Button, Switch, TextField } from '@mui/material';
+import { Button, Switch, TextField, Tooltip } from '@mui/material';
 import MantineNumberInput from './externalComponents/MantineNumberInput';
 import { SegmentedControl } from '@mantine/core';
 import MultipleSelectCheckmarks from './externalComponents/MultipleSelectCheckmarks';
@@ -192,7 +192,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                 size='lg'
                                 classNames={{ 
                                     item: 'text-sm whitespace-prewrap break-normal', 
-                                    input:'transition-all duration-200',
+                                    input:'transition-all duration-300 h-[56px]  dark:bg-[#202124]',
                                     dropdown: 'overflow-y-scroll max-h-[450px]'
                                 }}
                                 className='mx-auto w-[50%] sm:w-auto'
@@ -215,7 +215,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                 size='lg'
                                 classNames={{ 
                                     item: 'text-sm whitespace-prewrap break-normal',
-                                    input:'transition-all duration-200',
+                                    input:'transition-all duration-300  h-[56px] dark:bg-[#202124]',
                                     dropdown: 'overflow-y-scroll max-h-[450px]'
                                 }}
                                 className='mx-auto w-[50%] sm:w-auto'
@@ -283,19 +283,7 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
                                 ]}
                                 className='h-min rounded-full transition-all duration-200'
                         />
-                        <SegmentedControl 
-                                transitionDuration={300}
-                                transitionTimingFunction="linear"
-                                radius="lg"
-                                value={stopovers}
-                                color='indigo'
-                                onChange={(e) => setStopovers(e)}
-                                data={[
-                                    { label: 'No stopovers', value: '0' },
-                                    { label: 'Single stopover', value: '1' }
-                                ]}
-                                className='h-min rounded-full transition-all duration-200'
-                        />
+                        
                         <SegmentedControl 
                                     transitionDuration={300}
                                     transitionTimingFunction="linear"
@@ -364,8 +352,10 @@ function SearchForm ({darkMode, setFlights, setFlightListLoading, setError, retu
 
                 
                 </Collapse>
-                {returnFlight && returnDate == null ?                 
-                <button disabled onClick={() => enqueueSnackbar('Please select a return date')} className='box-border text-gray-400 bg-opacity-0 h-[40px] font-semibold border-[2px] border-gray-400 rounded-lg px-3 shadow-black transition-all duration-200 active:shadow-none active:border-red-600 active:text-red-600'>Submit</button>
+                {returnFlight && returnDate == null ?
+                <Tooltip title='Please provide a return date/select one-way flights' followCursor>
+                    <p onClick={() => enqueueSnackbar('Please select a return date')} className='box-border my-auto text-gray-400 bg-opacity-0 h-[40px] font-semibold border-[2px] border-gray-400 rounded-lg px-3 shadow-black transition-all duration-200 active:shadow-none active:border-red-600 active:text-red-600 pt-[6px]'>Submit</p>
+                </Tooltip>                 
                 : 
                 <button type='submit' className='box-border text-white h-[40px] font-semibold border-[1px] rounded-lg px-3 hover:bg-opacity-100 dark:hover:bg-opacity-100 border-blue-500 dark:border-blue-700 hover:text-white shadow-black hover:shadow-md bg-blue-500 dark:bg-blue-700 transition-all duration-200 active:brightness-[80%] active:shadow-none active:translate-y-[1px]'>Submit</button>}
             </form>
