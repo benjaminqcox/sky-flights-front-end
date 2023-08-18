@@ -23,7 +23,7 @@ function LandingPage({darkMode, userID, loggedIn}) {
     const getFlights = async () => {
         try {
             setLoading(true);
-            const URL = `http://3.9.218.228:8081/flights/getFiltered/?flyTo=JFK&flyFrom=LHR&leaveDateFrom=30/08/2023&leaveDateTo=30/08/2023&numberOfAdults=7`;
+            const URL = `/api/flights/getFiltered/?flyTo=JFK&flyFrom=LHR&leaveDateFrom=30/08/2023&leaveDateTo=30/08/2023&numberOfAdults=7`;
             const response = await axios.get(URL, { withCredentials: true });
             setListOfFlights(response.data)
             setLoading(false);

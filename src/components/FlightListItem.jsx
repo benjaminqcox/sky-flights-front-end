@@ -103,13 +103,13 @@ function FlightListItem( {darkMode, flightData, returnFlight, currency, setCurre
 
     const saveBooking = async () => {
         try {
-            const response3 = await axios.get(`http://3.9.218.228:8081/users/user`, { withCredentials: true });
+            const response3 = await axios.get(`/api/users/user`, { withCredentials: true });
 
-            const GETUSERID_URL = `http://3.9.218.228:8081/users/getUserID/${response3.data}`;
+            const GETUSERID_URL = `/api/users/getUserID/${response3.data}`;
             const response2 = await axios.get(GETUSERID_URL, { withCredentials: true });
             console.log("usernameID: ", response2.data);    
 
-            const URL = `http://3.9.218.228:8081/booking/create`;
+            const URL = `/api/booking/create`;
             const response = await axios.post(URL, {
                 flightID: 777,
                 flightFrom: flightData.flyFrom,

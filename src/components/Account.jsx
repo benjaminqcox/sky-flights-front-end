@@ -15,7 +15,7 @@ function Account ({ setLoggedIn, user, darkMode }){
     //Doesn't log out but can use this for demo if needed lol
     const handleLogout = async () => {
         setLoggedIn(false)
-        //const URL = `http://3.9.218.228:8081/logout`;
+        //const URL = `/api/logout`;
         //await axios.post(URL, { withCredentials: true });
         //console.log(response.data);
     }

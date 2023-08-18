@@ -24,7 +24,7 @@ function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLogge
         loginForm.append("username", username);
         loginForm.append("password", password)
         try {
-            const URL = `http://3.9.218.228:8081/login`;
+            const URL = `/api/login`;
             const response = await axios.post(URL, loginForm, { withCredentials: true });
             console.log("Login response data: ", response.data);
             setLoggedIn(() => true);
@@ -35,7 +35,7 @@ function Login ({darkMode, showLoginOrRegister, setShowLoginOrRegister, setLogge
         }
 
         try {
-            const GETUSERID_URL = `http://3.9.218.228:8081/users/getUserID/${username}`;
+            const GETUSERID_URL = `/api/users/getUserID/${username}`;
             const response2 = await axios.get(GETUSERID_URL, { withCredentials: true });
             console.log("usernameID: ", response2.data);
             setUserID(() => () => response2.data)

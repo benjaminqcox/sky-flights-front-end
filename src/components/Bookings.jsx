@@ -39,7 +39,7 @@ const Booking = () => {
     const cancelBooking = async (bookingID) => {
         setToDelete(bookingID);
         try {
-            const URL = `http://3.9.218.228:8081/booking/deleteBookingById/${bookingID}`
+            const URL = `/api/booking/deleteBookingById/${bookingID}`
             const response = await axios.delete(URL, { withCredentials: true });
             enqueueSnackbar('Booking cancelled', {variant: 'default',
             anchorOrigin: {
